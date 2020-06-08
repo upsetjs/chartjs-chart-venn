@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ESM Sample</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script defer src="https://unpkg.com/es-module-shims"></script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "ts-library-template": "../dist/tslibrary.esm.js"
+        }
+      }
+    </script>
+    <script type="module-shim">
+      import { test } from 'ts-library-template';
+
+      document.querySelector('#app').textContent = test();
+    </script>
+  </body>
+</html>
