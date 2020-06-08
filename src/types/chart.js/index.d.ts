@@ -11,6 +11,8 @@ declare module 'chart.js' {
   }
 
   export class Chart {
+    constructor(item: CanvasRenderingContext2D | string | HTMLCanvasElement, config: any);
+
     ctx?: CanvasRenderingContext2D;
 
     config: {
@@ -27,16 +29,10 @@ declare module 'chart.js' {
     update(): void;
   }
 
-  export interface IPlugin {
-    readonly id: string;
-    beforeUpdate?(chart: Chart): void;
-    beforeDatasetsDraw?(chart: Chart): void;
-    beforeEvent?(chart: Chart, event: { type: string }): void;
-  }
+  export const controllers: any;
 
-  export const plugins: {
-    register(plugin: IPlugin): void;
-  };
+  export class DatasetController {}
+  export class Element {}
 
   export type IMapping = {
     [key: string]: IMapping | number | string | boolean | null;
@@ -45,16 +41,6 @@ declare module 'chart.js' {
   export const defaults: {
     set(key: string, value: IMapping): void;
     [key: string]: any;
-  };
-
-  export interface IScaleConstructor {
-    readonly id: string;
-    readonly defaults: IMapping;
-  }
-
-  export const scaleService: {
-    registerScale(scale: IScaleConstructor): void;
-    getScaleConstructor(type: string): IScaleConstructor;
   };
 
   export const helpers: any;

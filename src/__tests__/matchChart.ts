@@ -1,5 +1,7 @@
-import 'jest';
-import { Chart } from '../chart';
+/// <reference types="jest" />
+/// <reference types="node" />
+
+import { helpers, Chart } from '../chart';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
 expect.extend({ toMatchImageSnapshot });
@@ -9,7 +11,7 @@ function toBuffer(canvas: HTMLCanvasElement) {
     canvas.toBlob((b) => {
       const file = new FileReader();
       file.onload = () => resolve(Buffer.from(file.result));
-      file.readAsArrayBuffer(b);
+      file.readAsArrayBuffer(b!);
     });
   });
 }
@@ -31,12 +33,12 @@ export default async function matchChart(config: any, width = 300, height = 300,
     },
     config.options || {}
   );
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d')!;
 
   // sync
-  Chart.helpers.requestAnimFrame = (c: () => void) => c();
+  helpers.requestAnimFrame = (c: () => void) => c();
 
-  const _ = new Chart(ctx, config);
+  new Chart(ctx, config);
 
   const image = await toBuffer(canvas);
   expect(image).toMatchImageSnapshot(matchOptions);
