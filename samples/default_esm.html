@@ -1,22 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ESM Sample</title>
+    <title>Chart</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="container" style="width: 75%;">
+      <canvas id="canvas"></canvas>
+    </div>
     <script defer src="https://unpkg.com/es-module-shims"></script>
     <script type="importmap-shim">
       {
         "imports": {
-          "ts-library-template": "../dist/tslibrary.esm.js"
+          "chart.js": "https://unpkg.com/chart.js@3.0.0-alpha/dist/Chart.esm.js",
+          "chartjs-chart-venn": "../dist/chartvenn.esm.js"
         }
       }
     </script>
     <script type="module-shim">
-      import { test } from 'ts-library-template';
+      import Chart from 'chart.js';
+      import { VennDiagramChart } from 'chartjs-chart-venn';
 
-      document.querySelector('#app').textContent = test();
+      const data = {
+        labels: [],
+        datasets: [
+          {
+            label: 'Test',
+            data: []
+        ],
+      };
+      const chart = new VennDiagramChart(document.getElementById('canvas').getContext('2d'), {
+        data: data,
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'Chart.js Venn Diagram Chart',
+          },
+        },
+      });
     </script>
   </body>
 </html>

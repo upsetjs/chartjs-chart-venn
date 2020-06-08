@@ -1,45 +1,53 @@
 {
-  "name": "ts-library-template",
-  "description": "TODO",
-  "version": "1.0.0",
+  "name": "chartjs-chart-venn",
+  "description": "Chart.js module for venn diagrams",
+  "version": "3.0.0-alpha.0",
   "author": {
     "name": "Samuel Gratzl",
     "email": "sam@sgratzl.com",
     "url": "https://www.sgratzl.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/sgratzl/ts-library-template",
+  "homepage": "https://github.com/sgratzl/chartjs-chart-venn",
   "bugs": {
-    "url": "https://github.com/sgratzl/ts-library-template/issues"
+    "url": "https://github.com/sgratzl/chartjs-chart-venn/issues"
   },
   "keywords": [
-    "TODO"
+    "chart.js",
+    "hierarchical",
+    "grouping"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/sgratzl/ts-library-template.git"
+    "url": "https://github.com/sgratzl/chartjs-chart-venn.git"
   },
-  "module": "dist/tslibrary.esm.js",
-  "main": "dist/tslibrary.umd.development.js",
-  "unpkg": "dist/tslibrary.umd.production.min.js",
-  "jsdelivr": "dist/tslibrary.umd.production.min.js",
+  "module": "dist/chartvenn.esm.js",
+  "main": "dist/chartvenn.umd.development.js",
+  "unpkg": "dist/chartvenn.umd.production.min.js",
+  "jsdelivr": "dist/chartvenn.umd.production.min.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist",
-    "src/**/*.ts"
+    "src/**/*.js"
   ],
   "browserslist": [
     "Firefox ESR",
     "last 2 Chrome versions",
     "last 2 Firefox versions"
   ],
+  "peerDependencies": {
+    "chart.js": "^3.0.0-alpha"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
     "@types/jest": "^25.2.3",
-    "@typescript-eslint/eslint-plugin": "^3.0.2",
-    "@typescript-eslint/parser": "^3.0.2",
+    "@types/jest-image-snapshot": "^3.1.0",
+    "@types/node": "^14.0.12",
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
     "@yarnpkg/pnpify": "^2.0.0-rc.22",
+    "chart.js": "^3.0.0-alpha",
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-react-app": "^5.2.1",
@@ -49,6 +57,7 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4",
+    "jest-image-snapshot": "^4.0.2",
     "prettier": "^2.0.5",
     "release-it": "^13.6.2",
     "rimraf": "^3.0.2",
@@ -65,8 +74,8 @@
     "clean": "rimraf dist .tmp node_modules",
     "compile": "tsc -p tsconfig.json --noEmit",
     "start": "npm run watch",
-    "watch": "tsdx watch --noClean --name TSLibrary --format esm,umd",
-    "build": "npm run clean && tsdx build --name TSLibrary --format esm,umd && npm run typings",
+    "watch": "tsdx watch --noClean --name ChartVenn --format esm,umd",
+    "build": "npm run clean && tsdx build --name ChartVenn --format esm,umd && npm run typings",
     "typings": "tsc -p tsconfig.dts.json && rollup -c rollup.dts.config.js",
     "test": "tsdx test --passWithNoTests",
     "test:watch": "tsdx test --passWithNoTests --watch",
@@ -82,5 +91,10 @@
     "prepare": "npm run build",
     "release": "release-it --disable-metrics --npm.skipChecks",
     "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
+  },
+  "dependenciesMeta": {
+    "chart.js": {
+      "unplugged": true
+    }
   }
 }

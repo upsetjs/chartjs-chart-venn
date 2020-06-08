@@ -1,3 +1,2 @@
-export function test() {
-  return 'hello-world';
-}
+export * from './controllers';
+export * from './elements';

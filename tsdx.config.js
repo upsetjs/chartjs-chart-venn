@@ -7,12 +7,11 @@ const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
 module.exports = {
   rollup(config, options) {
-    // if (options.format === 'umd') {
-    //   config.input = './src/bundle.ts';
-    // }
+    if (options.format === 'umd') {
+      config.input = './src/bundle.ts';
+    }
 
-    // TODO list UMD names of dependencies
-    // config.output.globals[''] = '';
+    config.output.globals['chart.js'] = 'Chart';
     const originalExternal = config.external;
     const external = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.peerDependencies || {}));
     config.external = (v) => (originalExternal(v) ? external.includes(v) : false);
@@ -29,8 +28,8 @@ module.exports = {
       })
     );
     config.output.banner = `/**
- * ts-library-template
- * https://github.com/sgratzl/ts-library-template
+ * chartjs-chart-venn
+ * https://github.com/sgratzl/chartjs-chart-venn
  *
  * Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
  */`;

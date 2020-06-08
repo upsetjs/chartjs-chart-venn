@@ -23,23 +23,12 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "outDir": "./dist",
+    "typeRoots": ["src/types", "./node_modules/@types"],
+    "types": ["chart.js", "jest", "node"],
     "paths": {
       "@": ["./src"],
       "*": ["*", "node_modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-
-  "typedocOptions": {
-    "name": "UpSet.js Model",
-    "out": "./docs",
-    "mode": "library",
-    "theme": "minimal",
-    "excludeNotExported": true,
-    "excludeExternals": true,
-    "excludePrivate": true,
-    "includeVersion": true,
-    "hideGenerator": true,
-    "entryPoint": "\"index\""
-  }
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

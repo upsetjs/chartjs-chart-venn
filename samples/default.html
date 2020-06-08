@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sample</title>
+    <title>Hierarchical Bar Chart</title>
+    <script src="https://unpkg.com/chart.js@3.0.0-alpha/dist/Chart.js"></script>
+    <script src="../dist/chartvenn.umd.development.js"></script>
   </head>
-  <body>
-    <div id="app"></div>
-    <script src="../dist/tslibrary.umd.development.js"></script>
-    <script>
-      const { test } = TSLibrary;
 
-      document.querySelector('#app').textContent = test();
+  <body>
+    <div id="container" style="width: 75%;">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      const data = {
+        labels: [],
+        datasets: [
+          {
+            label: 'Test',
+            data: [],
+          },
+        ],
+      };
+      window.onload = () => {
+        const ctx = document.getElementById('canvas').getContext('2d');
+        window.myBar = new Chart(ctx, {
+          type: 'venn',
+          data: data,
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: 'Chart.js Venn Diagram Chart',
+            },
+          },
+        });
+      };
     </script>
   </body>
 </html>
