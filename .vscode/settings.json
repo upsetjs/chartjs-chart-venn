@@ -17,5 +17,7 @@
   "prettier.prettierPath": ".vscode/pnpify/prettier/index.js",
   "files.eol": "\n",
   "typescript.tsdk": ".vscode/pnpify/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2
 }

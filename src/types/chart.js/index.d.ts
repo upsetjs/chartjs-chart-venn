@@ -23,6 +23,7 @@ declare module 'chart.js' {
       };
     };
 
+    chartArea: { top: number; left: number; right: number; bottom: number };
     data: IChartData;
     scales: { [key: string]: any };
 

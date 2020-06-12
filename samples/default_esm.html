@@ -18,20 +18,21 @@
     </script>
     <script type="module-shim">
       import Chart from 'chart.js';
-      import { VennDiagramChart } from 'chartjs-chart-venn';
+      import { VennDiagramChart, extractSets } from 'chartjs-chart-venn';
 
-      const data = {
-        labels: [],
-        datasets: [
-          {
-            label: 'Test',
-            data: []
+      const data = extractSets(
+        [
+          { label: 'Soccer', values: ['alex', 'casey', 'drew', 'hunter'] },
+          { label: 'Tennis', values: ['casey', 'drew', 'jade'] },
+          { label: 'Volleyball', values: ['drew', 'glen', 'jade'] },
         ],
-      };
+        {
+          label: 'Sports',
+        }
+      );
       const chart = new VennDiagramChart(document.getElementById('canvas').getContext('2d'), {
         data: data,
         options: {
-          responsive: true,
           title: {
             display: true,
             text: 'Chart.js Venn Diagram Chart',

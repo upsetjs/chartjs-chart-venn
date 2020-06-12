@@ -1,4 +1,4 @@
-import ChartNS from 'chart.js';
+import ChartNS, { Chart as ChartCore } from 'chart.js';
 
 export interface IChartDataSet {
   label?: string;
@@ -49,12 +49,32 @@ export function registerElement<T extends ElementConstructor>(element: T): T {
   });
   return element;
 }
+export const Element = ChartNS.Element;
 
-export declare class DatasetControllerType {}
+export declare class NumericScaleType {
+  getBasePixel(): number;
+}
+
+export declare class DatasetControllerType {
+  update(mode?: 'reset' | 'normal'): void;
+  resolveDataElementOptions(start: number, mode?: 'reset' | 'normal'): IMapping;
+  getSharedOptions(mode: 'reset' | 'normal' | undefined, elem: ChartNS.Element, firstOpts: IMapping): IMapping;
+  includeOptions(mode: 'reset' | 'normal' | undefined, sharedOptions: IMapping): boolean;
+  getParsed(index: number): any;
+  resolveDataElementOptions(index: number, mode?: 'reset' | 'normal'): IMapping;
+  updateElement(elem: ChartNS.Element, index: number, properties: IMapping, mode?: 'reset' | 'normal'): void;
+  updateSharedOptions(sharedOptions: IMapping, mode?: 'reset' | 'normal'): void;
+
+  readonly _cachedMeta: { data: Element[]; xScale: NumericScaleType; yScale: NumericScaleType };
+  readonly chart: ChartCore;
+  readonly _ctx: CanvasRenderingContext2D;
+}
 
 export declare type DatasetControllerTypeConstructor = {
   new (): DatasetControllerType;
 };
+
+export const DatasetController: DatasetControllerTypeConstructor = ChartNS.DatasetController as any;
 
 export declare type ControllerTypeConstructor = DatasetControllerTypeConstructor & {
   readonly id: string;
@@ -74,9 +94,6 @@ export function patchControllerConfig(config: any, controller: ControllerTypeCon
   config.type = controller.register().id;
   return config;
 }
-
-export const DatasetController: DatasetControllerTypeConstructor = ChartNS.DatasetController;
-export const Element = ChartNS.Element;
 
 export declare interface IChartHelpers {
   merge<T = IMapping>(target: any, sources: any[]): T;

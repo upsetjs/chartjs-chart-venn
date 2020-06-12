@@ -6,6 +6,12 @@ export class ArcSlice extends Element {
   static readonly defaults = /* #__PURE__ */ Object.assign({}, defaults.elements.Rectangle);
 
   static register() {
-    registerElement(ArcSlice);
+    return registerElement(ArcSlice);
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+
+    ctx.restore();
   }
 }
