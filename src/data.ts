@@ -21,7 +21,7 @@ function generateSubset<T>(
   lookup: ReadonlyMap<IRawSet<T>, Set<T>>
 ): ISet<T> {
   const sets = members.map((s) => s.label);
-  const label = members.join('∩');
+  const label = sets.join(' ∩ ');
   const others = members.slice(1).map((s) => lookup.get(s)!);
   const not = notMembers.map((s) => lookup.get(s)!);
   const values: T[] = members[0].values.filter((v) => others.every((o) => o.has(v)) && not.every((o) => !o.has(v)));

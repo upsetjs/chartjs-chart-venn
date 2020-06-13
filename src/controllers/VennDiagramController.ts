@@ -1,8 +1,9 @@
 import { Chart, DatasetController, registerController, patchControllerConfig, BarController } from '../chart';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import { IMapping } from 'chart.js';
-import layout from '../model/layout';
+import layout, { IVennDiagramLayout } from '../model/layout';
 import { IArcSlice } from '../model/interfaces';
+import { ISet } from '../data';
 
 export class VennDiagramController extends DatasetController {
   static readonly id = 'venn';
@@ -14,8 +15,11 @@ export class VennDiagramController extends DatasetController {
           // Title doesn't make sense for scatter since we format the data as a point
           return '';
         },
-        label(item: { index: number; values: any[] }, data: { labels: string[] }) {
-          return `${data.labels[item.index]}: ${item.values}`;
+        label(
+          item: { index: number; values: any[]; datasetIndex: number },
+          data: { labels: string[]; datasets: { data: { values: any[] }[] }[] }
+        ) {
+          return `${data.labels[item.index]}: ${data.datasets[item.datasetIndex].data[item.index].values}`;
         },
       },
     },
@@ -50,9 +54,6 @@ export class VennDiagramController extends DatasetController {
   }
 
   updateElements(slices: ArcSlice[], start: number, mode?: 'reset' | 'normal') {
-    // const meta = this._cachedMeta;
-    // const reset = mode === 'reset';
-
     const xScale = this._cachedMeta.xScale as { left: number; right: number };
     const yScale = this._cachedMeta.yScale as { top: number; bottom: number };
 
@@ -68,29 +69,17 @@ export class VennDiagramController extends DatasetController {
       cy: h / 2 + yScale.top,
       r: Math.min(w, h) / 2,
     });
+    (this._cachedMeta as any)._layout = l;
+    (this._cachedMeta as any)._layoutFont = (xScale as any)._resolveTickFontOptions(0);
 
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(mode || 'normal', slices[start], firstOpts);
     const includeOptions = this.includeOptions(mode, sharedOptions);
 
-    // const yScale = meta.yScale;
-
-    // const basePoint = {
-    //   x: xScale.getBasePixel(),
-    //   y: yScale.getBasePixel(),
-    // };
-
     for (let i = 0; i < slices.length; i++) {
       const slice = slices[i];
       const index = start + i;
-      // const parsed = this.getParsed(index);
-
-      const properties: IArcSlice & { options?: IArcSliceOptions } = Object.assign(
-        {
-          label: 'A',
-        },
-        l.intersections[index]
-      );
+      const properties: IArcSlice & { options?: IArcSliceOptions } = Object.assign({}, l.intersections[index]);
       if (includeOptions) {
         properties.options = (this.resolveDataElementOptions(index, mode) as unknown) as IArcSliceOptions;
       }
@@ -105,6 +94,27 @@ export class VennDiagramController extends DatasetController {
 
     const ctx = this._ctx;
     elements.forEach((elem) => elem.draw(ctx));
+
+    ctx.save();
+
+    const l = (meta as any)._layout as IVennDiagramLayout;
+    const font = (meta as any)._layoutFont;
+    ctx.textBaseline = 'middle';
+    ctx.font = font.string;
+    ctx.fillStyle = font.color;
+    ctx.textBaseline = 'middle';
+    const labels = (this as any)._labels as string[];
+    l.sets.forEach((set, i) => {
+      ctx.textAlign = set.angle > 200 ? 'right' : set.angle < 200 ? 'left' : 'center';
+      ctx.fillText(labels[i], set.text.x, set.text.y);
+    });
+    ctx.textAlign = 'center';
+    const values = (this as any).getDataset().data as ISet<any>[];
+    l.intersections.forEach((l, i) => {
+      ctx.fillText(values[i].c.toLocaleString(), l.text.x, l.text.y);
+    });
+
+    ctx.restore();
   }
 }
 

@@ -13,7 +13,7 @@ export class ArcSlice extends Element {
   static readonly id = 'arcSlice';
   static readonly _type = 'arcSlice';
   static readonly defaults = /* #__PURE__ */ Object.assign({}, defaults.elements.rectangle, {
-    backgroundColor: 'lightgray',
+    backgroundColor: '#efefef',
   });
 
   static register() {
@@ -53,6 +53,10 @@ export class ArcSlice extends Element {
 
   tooltipPosition() {
     return this.getCenterPoint();
+  }
+
+  hasValue() {
+    return true;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
