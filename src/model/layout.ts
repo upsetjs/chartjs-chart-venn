@@ -45,21 +45,29 @@ function one(size: IChartArea): IVennDiagramLayout {
           x: size.cx,
           y: size.cy,
         },
-        arcs: [arc(p1, size.r), arc(p0, size.r)],
+        arcs: [arc(size, 'inside', p1, size.r), arc(size, 'inside', p0, size.r)],
       },
     ],
   };
 }
 
-function arc(p1: { cx: number; cy: number }, r: number, largeArcFlag = false, sweepFlag = false): IArc {
+function arc(
+  center: { cx: number; cy: number },
+  mode: 'inside' | 'outside',
+  p1: { cx: number; cy: number },
+  r: number,
+  largeArcFlag = false,
+  sweepFlag = false
+): IArc {
   return {
-    rx: r,
-    ry: r,
-    rotation: 0,
+    r,
     largeArcFlag,
     sweepFlag,
     x2: p1.cx,
     y2: p1.cy,
+    cx: center.cx,
+    cy: center.cy,
+    mode,
   };
 }
 
@@ -69,17 +77,6 @@ export function computeCenter(arcs: IArc[]) {
   return {
     cx: sumX / arcs.length,
     cy: sumY / arcs.length,
-  };
-}
-
-function arcSlice(p0: { cx: number; cy: number }, p1: { cx: number; cy: number }, r: number): ITextArcSlice {
-  const arcs = [arc(p1, r), arc(p0, r)];
-  const { cx, cy } = computeCenter(arcs);
-  return {
-    x1: p0.cx,
-    y1: p0.cy,
-    arcs,
-    text: { x: cx, y: cy },
   };
 }
 
@@ -125,7 +122,7 @@ function two(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
       {
         x1: p0.cx,
         y1: p0.cy,
-        arcs: [arc(p1, r, false, true), arc(p0, r, true)],
+        arcs: [arc(c0, 'inside', p1, r, false, true), arc(c1, 'outside', p0, r, true)],
         text: {
           x: c0x,
           y: size.cy,
@@ -134,13 +131,13 @@ function two(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
       {
         x1: p0.cx,
         y1: p0.cy,
-        arcs: [arc(p1, r, true, false), arc(p0, r, false, true)],
+        arcs: [arc(c1, 'inside', p1, r, true, false), arc(c0, 'outside', p0, r, false, true)],
         text: {
           x: c1x,
           y: size.cy,
         },
       },
-      arcSlice(p0, p1, r),
+      arcCenter(p0, [arc(c0, 'inside', p1, r), arc(c1, 'inside', p0, r)]),
     ],
   };
 }
@@ -199,7 +196,7 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
       {
         x1: p01_1.cx,
         y1: p01_1.cy,
-        arcs: [arc(p12_0, r), arc(p20_1, r), arc(p01_1, r, true, true)],
+        arcs: [arc(c1, 'outside', p12_0, r), arc(c2, 'outside', p20_1, r), arc(c0, 'inside', p01_1, r, true, true)],
         text: {
           x: c0x,
           y: c0y,
@@ -208,7 +205,7 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
       {
         x1: p12_1.cx,
         y1: p12_1.cy,
-        arcs: [arc(p20_0, r), arc(p01_1, r), arc(p12_1, r, true, true)],
+        arcs: [arc(c2, 'outside', p20_0, r), arc(c0, 'outside', p01_1, r), arc(c1, 'inside', p12_1, r, true, true)],
         text: {
           x: c1x,
           y: c1y,
@@ -217,16 +214,32 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
       {
         x1: p20_1.cx,
         y1: p20_1.cy,
-        arcs: [arc(p01_0, r), arc(p12_1, r), arc(p20_1, r, true, true)],
+        arcs: [arc(c0, 'outside', p01_0, r), arc(c1, 'outside', p12_1, r), arc(c2, 'inside', p20_1, r, true, true)],
         text: {
           x: c2x,
           y: c2y,
         },
       },
-      arcCenter(p20_0, [arc(p01_1, r), arc(p12_0, r), arc(p20_0, r, false, true)]),
-      arcCenter(p12_0, [arc(p20_1, r), arc(p01_0, r), arc(p12_0, r, false, true)]),
-      arcCenter(p01_0, [arc(p12_1, r), arc(p20_0, r), arc(p01_0, r, false, true)]),
-      arcCenter(p12_0, [arc(p20_0, r, false, true), arc(p01_0, r, false, true), arc(p12_0, r, false, true)]),
+      arcCenter(p20_0, [
+        arc(c0, 'inside', p01_1, r),
+        arc(c1, 'inside', p12_0, r),
+        arc(c2, 'outside', p20_0, r, false, true),
+      ]),
+      arcCenter(p12_0, [
+        arc(c2, 'inside', p20_1, r),
+        arc(c0, 'inside', p01_0, r),
+        arc(c1, 'outside', p12_0, r, false, true),
+      ]),
+      arcCenter(p01_0, [
+        arc(c1, 'inside', p12_1, r),
+        arc(c2, 'inside', p20_0, r),
+        arc(c0, 'outside', p01_0, r, false, true),
+      ]),
+      arcCenter(p12_0, [
+        arc(c2, 'inside', p20_0, r, false, true),
+        arc(c0, 'inside', p01_0, r, false, true),
+        arc(c1, 'inside', p12_0, r, false, true),
+      ]),
     ],
   };
 }

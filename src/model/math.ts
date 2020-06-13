@@ -3,8 +3,7 @@ declare type Point = { cx: number; cy: number };
 function len(x: number, y: number) {
   return Math.sqrt(x * x + y * y);
 }
-
-function dist(a: Point, b: Point) {
+export function dist(a: Point, b: Point) {
   return len(a.cx - b.cx, a.cy - b.cy);
 }
 

@@ -79,7 +79,7 @@ export const BarController = ChartNS.controllers.bar as any;
 
 export declare type ControllerTypeConstructor = DatasetControllerTypeConstructor & {
   readonly id: string;
-  readonly defaults: IMapping;
+  readonly defaults: any;
 
   register(): ControllerTypeConstructor;
 };

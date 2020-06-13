@@ -13,13 +13,15 @@ export interface ITextCircle extends ICircle, ITextLocation {}
 
 // could be slice
 export interface IArc {
-  rx: number;
-  ry: number;
-  rotation: number;
+  r: number;
   x2: number;
   y2: number;
   sweepFlag: boolean;
   largeArcFlag: boolean;
+
+  cx: number;
+  cy: number;
+  mode: 'inside' | 'outside';
 }
 
 export interface IArcSlice {

@@ -8,6 +8,17 @@ export class VennDiagramController extends DatasetController {
   static readonly id = 'venn';
 
   static readonly defaults = {
+    tooltips: {
+      callbacks: {
+        title() {
+          // Title doesn't make sense for scatter since we format the data as a point
+          return '';
+        },
+        label(item: { index: number; values: any[] }, data: { labels: string[] }) {
+          return `${data.labels[item.index]}: ${item.values}`;
+        },
+      },
+    },
     scales: {
       x: {
         type: 'linear',
@@ -47,7 +58,7 @@ export class VennDiagramController extends DatasetController {
 
     const w = xScale.right - xScale.left;
     const h = yScale.bottom - yScale.top;
-    const nSets = Math.log2(slices.length + 1);
+    const nSets = Math.log2(this._cachedMeta.data.length + 1);
     const l = layout(nSets, {
       x: xScale.left,
       y: yScale.top,
@@ -62,7 +73,6 @@ export class VennDiagramController extends DatasetController {
     const sharedOptions = this.getSharedOptions(mode || 'normal', slices[start], firstOpts);
     const includeOptions = this.includeOptions(mode, sharedOptions);
 
-    // const xScale = meta.xScale;
     // const yScale = meta.yScale;
 
     // const basePoint = {
@@ -79,7 +89,7 @@ export class VennDiagramController extends DatasetController {
         {
           label: 'A',
         },
-        l.intersections[i]
+        l.intersections[index]
       );
       if (includeOptions) {
         properties.options = (this.resolveDataElementOptions(index, mode) as unknown) as IArcSliceOptions;

@@ -1,6 +1,7 @@
 import { defaults, Element, registerElement } from '../chart';
 import { IArcSlice, ITextArcSlice } from '../model/interfaces';
 import { generateArcSlicePath } from '../model/generate';
+import { dist } from '../model/math';
 
 export interface IArcSliceOptions {
   backgroundColor: string;
@@ -11,27 +12,30 @@ export interface IArcSliceOptions {
 export class ArcSlice extends Element {
   static readonly id = 'arcSlice';
   static readonly _type = 'arcSlice';
-  static readonly defaults = /* #__PURE__ */ Object.assign({}, defaults.elements.rectangle);
+  static readonly defaults = /* #__PURE__ */ Object.assign({}, defaults.elements.rectangle, {
+    backgroundColor: 'lightgray',
+  });
 
   static register() {
     return registerElement(ArcSlice);
   }
 
-  inRange(_mouseX: number, _mouseY: number) {
-    // const bb = this.getBounds();
-    // const r =
-    //   (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
-    //   (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
+  inRange(mouseX: number, mouseY: number) {
+    const props = this.getProps<IArcSlice>(['arcs']);
 
-    // const projection = this.projectionScale.geoPath.projection();
-    // if (r && !Number.isNaN(mouseX) && !Number.isNaN(mouseY) && typeof projection.invert === 'function') {
-    //   // test for real if within the bounds
-    //   const longlat = projection.invert([mouseX, mouseY]);
-    //   return longlat && geoContains(this.feature, longlat);
-    // }
+    for (let i = 0; i < props.arcs.length; i++) {
+      const arc = props.arcs[i];
+      const p = {
+        cx: Number.isNaN(mouseX) ? arc.cx : mouseX,
+        cy: Number.isNaN(mouseY) ? arc.cy : mouseY,
+      };
 
-    // return r;
-    return false; // TODO
+      const d = dist(p, arc) - arc.r;
+      if ((arc.mode === 'inside' && d > 0) || (arc.mode === 'outside' && d < 0)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   inXRange(mouseX: number) {
