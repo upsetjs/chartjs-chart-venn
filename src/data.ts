@@ -15,11 +15,16 @@ export interface ISet<T> {
   degree: number;
 }
 
-function generateSubset<T>(raws: IRawSet<T>[]): ISet<T> {
-  const sets = raws.map((s) => s.label);
-  const label = raws.join('∩');
-  const others = raws.slice(1).map((s) => new Set(s.values));
-  const values: T[] = raws[0].values.filter((v) => others.every((o) => o.has(v)));
+function generateSubset<T>(
+  members: IRawSet<T>[],
+  notMembers: IRawSet<T>[],
+  lookup: ReadonlyMap<IRawSet<T>, Set<T>>
+): ISet<T> {
+  const sets = members.map((s) => s.label);
+  const label = members.join('∩');
+  const others = members.slice(1).map((s) => lookup.get(s)!);
+  const not = notMembers.map((s) => lookup.get(s)!);
+  const values: T[] = members[0].values.filter((v) => others.every((o) => o.has(v)) && not.every((o) => !o.has(v)));
 
   return {
     sets,
@@ -32,18 +37,28 @@ function generateSubset<T>(raws: IRawSet<T>[]): ISet<T> {
 
 export function extractSets<T>(data: ReadonlyArray<IRawSet<T>>, options: IGenerateOptions = {}) {
   const sets: ISet<T>[] = [];
+  const lookup = new Map(data.map((s) => [s, new Set(s.values)]));
   const base = data.slice(0, 3);
-  base.forEach((b) => sets.push(Object.assign({}, b, { c: b.values.length, sets: [b.label], degree: 1 })));
   switch (base.length) {
+    case 1:
+      sets.push(generateSubset([base[0]], [], lookup));
+      break;
     case 2:
-      sets.push(generateSubset([base[0], base[1]]));
+      sets.push(
+        generateSubset([base[0]], [base[1]], lookup),
+        generateSubset([base[1]], [base[0]], lookup),
+        generateSubset([base[0], base[1]], [], lookup)
+      );
       break;
     case 3:
       sets.push(
-        generateSubset([base[0], base[1]]),
-        generateSubset([base[1], base[2]]),
-        generateSubset([base[2], base[0]]),
-        generateSubset([base[0], base[1], base[2]])
+        generateSubset([base[0]], [base[1], base[2]], lookup),
+        generateSubset([base[1]], [base[0], base[2]], lookup),
+        generateSubset([base[2]], [base[0], base[1]], lookup),
+        generateSubset([base[0], base[1]], [base[2]], lookup),
+        generateSubset([base[1], base[2]], [base[0]], lookup),
+        generateSubset([base[2], base[0]], [base[1]], lookup),
+        generateSubset([base[0], base[1], base[2]], [], lookup)
       );
       break;
   }

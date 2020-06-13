@@ -1,11 +1,15 @@
+export interface ITextLocation {
+  text: { x: number; y: number };
+}
+
 export interface ICircle {
   r: number;
   cx: number;
   cy: number;
   angle: number;
-
-  text: { x: number; y: number };
 }
+
+export interface ITextCircle extends ICircle, ITextLocation {}
 
 // could be slice
 export interface IArc {
@@ -19,15 +23,9 @@ export interface IArc {
 }
 
 export interface IArcSlice {
-  text: { x: number; y: number };
-
   x1: number;
   y1: number;
   arcs: ReadonlyArray<IArc>;
 }
 
-export interface IUniverseSet extends IArcSlice {
-  width: number;
-  height: number;
-  angle: number;
-}
+export interface ITextArcSlice extends IArcSlice, ITextLocation {}

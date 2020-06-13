@@ -1,6 +1,7 @@
-import { Chart, DatasetController, registerController, patchControllerConfig } from '../chart';
+import { Chart, DatasetController, registerController, patchControllerConfig, defaults } from '../chart';
 import { ArcSlice } from '../elements';
 import { IMapping } from 'chart.js';
+import layout from '../model/layout';
 
 export class VennDiagramController extends DatasetController {
   static readonly id = 'venn';
@@ -25,7 +26,7 @@ export class VennDiagramController extends DatasetController {
   static register() {
     const p = VennDiagramController.prototype as any;
     p.dataElementType = ArcSlice.register();
-    p.dataElementOptions = [];
+    p.dataElementOptions = defaults.bar.prototype.dataElementOptions;
     return registerController(VennDiagramController);
   }
 
@@ -39,6 +40,17 @@ export class VennDiagramController extends DatasetController {
   updateElements(slices: ArcSlice[], start: number, mode?: 'reset' | 'normal') {
     const meta = this._cachedMeta;
     const reset = mode === 'reset';
+
+    const area = this.chart.chartArea;
+    const w = area.right - area.left;
+    const h = area.bottom - area.top;
+    const l = layout(slices.length, {
+      w,
+      h,
+      cx: w / 2 + area.left,
+      cy: h / 2 + area.top,
+      r: Math.min(w, h) / 2,
+    });
 
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(mode || 'normal', slices[start], firstOpts);

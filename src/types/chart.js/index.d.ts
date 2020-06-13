@@ -33,7 +33,10 @@ declare module 'chart.js' {
   export const controllers: any;
 
   export class DatasetController {}
-  export class Element {}
+  export class Element {
+    getProps<T>(props: ReadonlyArray<keyof T>): T;
+    options: IMapping;
+  }
 
   export type IMapping = {
     [key: string]: IMapping | number | string | boolean | null;

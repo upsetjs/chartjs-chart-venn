@@ -1,25 +1,11 @@
 import { circleIntersectionPoints, DEG2RAD, pointAtCircle } from './math';
-import { IArc, IArcSlice, ICircle, IUniverseSet } from './interfaces';
+import { IArc, ITextArcSlice, ITextCircle } from './interfaces';
 
 // could be slice of three
 
-export function generateUniverseSetPath(l: IUniverseSet) {
-  const { width: w, height: h, x1, y1 } = l;
-  const arcs = l.arcs
-    .map(
-      (arc) =>
-        `A ${arc.rx} ${arc.ry} ${arc.rotation} ${arc.largeArcFlag ? 1 : 0} ${arc.sweepFlag ? 1 : 0} ${arc.x2} ${arc.y2}`
-    )
-    .join(' ');
-  return y1 < h / 2
-    ? `M 0 0 L ${x1} 0 L ${x1} ${y1} ${arcs} L ${x1} 0 L ${w} 0 L ${w} ${h} L 0 ${h} Z`
-    : `M ${w} ${h} L ${x1} ${h} L ${x1} ${y1} ${arcs} L ${x1} ${h} L 0 ${h} L 0 0 L ${w} 0 Z`;
-}
-
 export interface IVennDiagramLayout {
-  sets: ICircle[];
-  universe: IUniverseSet;
-  intersections: IArcSlice[];
+  sets: ITextCircle[];
+  intersections: ITextArcSlice[];
 }
 
 interface IChartArea {
@@ -31,51 +17,35 @@ interface IChartArea {
 }
 
 function one(size: IChartArea): IVennDiagramLayout {
+  const p0 = {
+    cx: size.cx,
+    cy: size.cy - size.r,
+  };
+  const p1 = {
+    cx: size.cx,
+    cy: size.cy + size.r,
+  };
   return {
     sets: [
       {
         r: size.r,
         cx: size.cx,
         cy: size.cy,
-        angle: 0,
-        text: { x: size.cx, y: size.cy },
+        angle: 180,
+        text: pointAtCircle(size.cx, size.cy, size.r * 1.1, 120 - 90),
       },
     ],
-    universe: {
-      // rect without a circle
-      width: size.w,
-      height: size.h,
-      x1: size.cx,
-      y1: size.cy - size.r,
-      // universe at lower left corner
-      text: {
-        x: (size.w - size.r * 2) / 2,
-        y: size.h - (size.h - size.r * 2) / 2,
+    intersections: [
+      {
+        x1: p0.cx,
+        y1: p0.cy,
+        text: {
+          x: size.cx,
+          y: size.cy,
+        },
+        arcs: [arc(p1, size.r), arc(p0, size.r)],
       },
-      angle: 90,
-      arcs: [
-        {
-          rx: size.r,
-          ry: size.r,
-          rotation: 0,
-          largeArcFlag: false,
-          sweepFlag: false,
-          x2: size.cx,
-          y2: size.cy + size.r,
-        },
-        {
-          rx: size.r,
-          ry: size.r,
-          rotation: 0,
-          largeArcFlag: false,
-          sweepFlag: true,
-          x2: size.cx,
-          y2: size.cy - size.r,
-        },
-      ],
-    },
-
-    intersections: [],
+    ],
   };
 }
 
@@ -91,7 +61,7 @@ function arc(p1: { cx: number; cy: number }, r: number, largeArcFlag = false, sw
   };
 }
 
-function computeCenter(arcs: IArc[]) {
+export function computeCenter(arcs: IArc[]) {
   const sumX = arcs.reduce((acc, a) => acc + a.x2, 0);
   const sumY = arcs.reduce((acc, a) => acc + a.y2, 0);
   return {
@@ -100,7 +70,7 @@ function computeCenter(arcs: IArc[]) {
   };
 }
 
-function arcSlice(p0: { cx: number; cy: number }, p1: { cx: number; cy: number }, r: number): IArcSlice {
+function arcSlice(p0: { cx: number; cy: number }, p1: { cx: number; cy: number }, r: number): ITextArcSlice {
   const arcs = [arc(p1, r), arc(p0, r)];
   const { cx, cy } = computeCenter(arcs);
   return {
@@ -111,7 +81,7 @@ function arcSlice(p0: { cx: number; cy: number }, p1: { cx: number; cy: number }
   };
 }
 
-function arcCenter(p1: { cx: number; cy: number }, arcs: IArc[]): IArcSlice {
+function arcCenter(p1: { cx: number; cy: number }, arcs: IArc[]): ITextArcSlice {
   const center = computeCenter(arcs);
   return {
     x1: p1.cx,
@@ -128,10 +98,9 @@ function two(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
   // 0.5 radi overlap
   // 3.5 x 2 radi box
   const r = Math.floor(Math.min(size.h / 2, size.w / (4 - radiOverlap)));
-  const wRest = size.w - r * 3.5;
 
   const c0x = size.cx - r * (1 - radiOverlap);
-  const c0: ICircle = {
+  const c0: ITextCircle = {
     r,
     cx: c0x,
     cy: size.cy,
@@ -140,7 +109,7 @@ function two(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
   };
 
   const c1x = size.cx + r * (1 - radiOverlap);
-  const c1: ICircle = {
+  const c1: ITextCircle = {
     r,
     cx: c1x,
     cy: size.cy,
@@ -150,16 +119,6 @@ function two(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
   const [p0, p1] = circleIntersectionPoints(c0, c1);
   return {
     sets: [c0, c1],
-    universe: {
-      width: size.w,
-      height: size.h,
-      x1: p0.cx,
-      y1: p0.cy,
-      // universe at lower left corner
-      angle: 90,
-      text: { x: wRest / 2, y: size.h - (size.h - size.r * 2) / 2 },
-      arcs: [arc(p1, r, true), arc(p0, r, true)],
-    },
     intersections: [
       {
         x1: p0.cx,
@@ -200,7 +159,7 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
 
   const c0x = cx + offset * Math.cos(-90 * DEG2RAD);
   const c0y = cy - offset * Math.sin(-90 * DEG2RAD);
-  const c0: ICircle = {
+  const c0: ITextCircle = {
     r,
     cx: c0x,
     cy: c0y,
@@ -210,7 +169,7 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
 
   const c1x = cx - offset * Math.cos(30 * DEG2RAD);
   const c1y = cy - offset * Math.sin(30 * DEG2RAD);
-  const c1: ICircle = {
+  const c1: ITextCircle = {
     r,
     cx: c1x,
     cy: c1y,
@@ -220,7 +179,7 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
 
   const c2x = cx - offset * Math.cos(150 * DEG2RAD);
   const c2y = cy - offset * Math.sin(150 * DEG2RAD);
-  const c2: ICircle = {
+  const c2: ITextCircle = {
     r,
     cx: c2x,
     cy: c2y,
@@ -234,18 +193,6 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
 
   return {
     sets: [c0, c1, c2],
-    universe: {
-      text: {
-        x: (size.cx - r) / 2,
-        y: size.h - (size.cy - r) / 2,
-      },
-      angle: 90,
-      width: size.w,
-      height: size.h,
-      x1: p12_0.cx,
-      y1: p12_0.cy,
-      arcs: [arc(p20_0, r, true), arc(p01_0, r, true), arc(p12_0, r, true)],
-    },
     intersections: [
       {
         x1: p01_1.cx,
@@ -287,18 +234,6 @@ export default function vennDiagramLayout(sets: number, size: IChartArea, radiOv
     case 0:
       return {
         sets: [],
-        universe: {
-          text: {
-            x: size.cx,
-            y: size.cy,
-          },
-          angle: 0,
-          width: size.w,
-          height: size.h,
-          x1: 0,
-          y1: 0,
-          arcs: [],
-        },
         intersections: [],
       };
     case 1:
