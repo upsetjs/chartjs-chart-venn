@@ -10,7 +10,7 @@ function toBuffer(canvas: HTMLCanvasElement) {
   return new Promise((resolve) => {
     canvas.toBlob((b) => {
       const file = new FileReader();
-      file.onload = () => resolve(Buffer.from(file.result));
+      file.onload = () => resolve(Buffer.from(file.result as ArrayBuffer));
       file.readAsArrayBuffer(b!);
     });
   });

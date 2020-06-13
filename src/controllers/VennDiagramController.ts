@@ -118,7 +118,7 @@ export class VennDiagramController extends DatasetController {
   }
 }
 
-export class VennDiagramsChart extends Chart {
+export class VennDiagramChart extends Chart {
   static readonly id = VennDiagramController.id;
 
   constructor(item: any, config: any) {

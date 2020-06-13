@@ -66,7 +66,7 @@ export function extractSets<T>(data: ReadonlyArray<IRawSet<T>>, options: IGenera
     labels: sets.map((s) => s.label),
     datasets: [
       {
-        label: options.label ?? 'Venn Diagram',
+        label: options.label || 'Venn Diagram',
         data: sets,
       },
     ],

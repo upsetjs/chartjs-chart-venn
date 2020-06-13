@@ -2,6 +2,9 @@ packageExtensions:
   'tsdx@*':
     dependencies:
       'babel-jest': '^25.5.1'
+  'jsdom@*':
+    dependencies:
+      'canvas': '^2.6.1'
   'eslint-config-react-app@*':
     dependencies:
       'babel-eslint': '*'
