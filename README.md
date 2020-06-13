@@ -68,7 +68,7 @@ new Chart(ctx, {
 Variant B:
 
 ```js
-import { VennDiagramChart } from 'chartjs-chart-pcp';
+import { VennDiagramChart } from 'chartjs-chart-venn';
 
 new VennDiagramChart(ctx, {
   data: [...],
