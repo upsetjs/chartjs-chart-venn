@@ -18,13 +18,13 @@ npm install --save chart.js@next chartjs-chart-venn@next
 
 see [Samples](https://github.com/sgratzl/chartjs-chart-venn/tree/master/samples) on Github
 
-or at this [![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/TODO)
+or at this [![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/ExPyZjG)
 
 ## Venn Diagram
 
 ### Data Structure
 
-```js
+```ts
 const config = {
   type: 'venn',
   data: ChartVenn.extractSets(
