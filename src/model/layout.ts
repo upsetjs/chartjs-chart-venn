@@ -9,6 +9,8 @@ export interface IVennDiagramLayout {
 }
 
 interface IChartArea {
+  x: number;
+  y: number;
   cx: number;
   cy: number;
   w: number;
@@ -132,7 +134,7 @@ function two(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
       {
         x1: p0.cx,
         y1: p0.cy,
-        arcs: [arc(p1, r, true, false), arc(p0, r, false, false)],
+        arcs: [arc(p1, r, true, false), arc(p0, r, false, true)],
         text: {
           x: c1x,
           y: size.cy,
@@ -153,7 +155,7 @@ function three(size: IChartArea, radiOverlap: number): IVennDiagramLayout {
   const cx = size.cx;
   const a = r * (2 - radiOverlap * 2);
   const outerRadius = a / Math.sqrt(3);
-  const cy = size.h - r - outerRadius; // outer circle
+  const cy = size.y + size.h - r - outerRadius; // outer circle
 
   const offset = outerRadius;
 

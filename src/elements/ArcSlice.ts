@@ -17,7 +17,7 @@ export class ArcSlice extends Element {
     return registerElement(ArcSlice);
   }
 
-  inRange(mouseX: number, mouseY: number) {
+  inRange(_mouseX: number, _mouseY: number) {
     // const bb = this.getBounds();
     // const r =
     //   (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&

@@ -65,7 +65,7 @@ export declare class DatasetControllerType {
   updateElement(elem: ChartNS.Element, index: number, properties: IMapping, mode?: 'reset' | 'normal'): void;
   updateSharedOptions(sharedOptions: IMapping, mode?: 'reset' | 'normal'): void;
 
-  readonly _cachedMeta: { data: Element[]; xScale: NumericScaleType; yScale: NumericScaleType };
+  readonly _cachedMeta: { data: Element[]; xScale: any; yScale: any };
   readonly chart: ChartCore;
   readonly _ctx: CanvasRenderingContext2D;
 }
@@ -75,6 +75,7 @@ export declare type DatasetControllerTypeConstructor = {
 };
 
 export const DatasetController: DatasetControllerTypeConstructor = ChartNS.DatasetController as any;
+export const BarController = ChartNS.controllers.bar as any;
 
 export declare type ControllerTypeConstructor = DatasetControllerTypeConstructor & {
   readonly id: string;
