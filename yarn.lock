@@ -1724,6 +1724,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-selection@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@types/d3-selection@npm:1.4.1"
+  checksum: 15eeba9663bd3f907da5eafa09dd462066ed7765212c193f9552a5190f3704bf240585fe0007476a107e948b0310a45dfe67b865607fe8b4255fde5f58043bd8
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.38.0":
   version: 1.39.4
   resolution: "@types/emscripten@npm:1.39.4"
@@ -3243,6 +3250,7 @@ __metadata:
   resolution: "chartjs-chart-venn@workspace:."
   dependencies:
     "@rollup/plugin-commonjs": ^13.0.0
+    "@types/d3-selection": ^1.4.1
     "@types/jest": ^25.2.3
     "@types/jest-image-snapshot": ^3.1.0
     "@types/node": ^14.0.13
