@@ -1,6 +1,5 @@
 import { Chart, DatasetController, registerController, patchControllerConfig, BarController } from '../chart';
 import { ArcSlice, IArcSliceOptions } from '../elements';
-import { IMapping } from 'chart.js';
 import layout, { IVennDiagramLayout, IChartArea } from '../model/layout';
 import { IArcSlice } from '../model/interfaces';
 import { ISet } from '../data';
@@ -89,7 +88,7 @@ export class VennDiagramController extends DatasetController {
       if (includeOptions) {
         properties.options = (this.resolveDataElementOptions(index, mode) as unknown) as IArcSliceOptions;
       }
-      this.updateElement(slice, index, (properties as unknown) as IMapping, mode);
+      this.updateElement(slice, index, properties as any, mode);
     }
     this.updateSharedOptions(sharedOptions, mode);
   }

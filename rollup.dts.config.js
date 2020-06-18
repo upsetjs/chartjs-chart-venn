@@ -4,7 +4,7 @@ import fs from 'fs';
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
 export default {
-  input: './.tmp/index.d.ts',
+  input: './src/index.ts',
   output: {
     file: 'dist/index.d.ts',
     format: 'es',
