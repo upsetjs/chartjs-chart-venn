@@ -77,8 +77,6 @@ export class ArcSlice extends Element {
       ctx.stroke(path);
     }
 
-    // TODO render label
-
     ctx.restore();
   }
 }
