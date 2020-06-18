@@ -12,6 +12,7 @@ module.exports = {
     }
 
     config.output.globals['chart.js'] = 'Chart';
+    config.output.globals['@upsetjs/venn.js'] = 'venn';
     const originalExternal = config.external;
     const external = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.peerDependencies || {}));
     config.external = (v) => (originalExternal(v) ? external.includes(v) : false);

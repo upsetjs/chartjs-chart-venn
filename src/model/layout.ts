@@ -8,7 +8,7 @@ export interface IVennDiagramLayout {
   intersections: ITextArcSlice[];
 }
 
-interface IChartArea {
+export interface IChartArea {
   x: number;
   y: number;
   cx: number;

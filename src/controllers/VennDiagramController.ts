@@ -1,12 +1,12 @@
 import { Chart, DatasetController, registerController, patchControllerConfig, BarController } from '../chart';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import { IMapping } from 'chart.js';
-import layout, { IVennDiagramLayout } from '../model/layout';
+import layout, { IVennDiagramLayout, IChartArea } from '../model/layout';
 import { IArcSlice } from '../model/interfaces';
 import { ISet } from '../data';
 
 export class VennDiagramController extends DatasetController {
-  static readonly id = 'venn';
+  static readonly id: string = 'venn';
 
   static readonly defaults = {
     tooltips: {
@@ -17,9 +17,10 @@ export class VennDiagramController extends DatasetController {
         },
         label(
           item: { index: number; values: any[]; datasetIndex: number },
-          data: { labels: string[]; datasets: { data: { values: any[] }[] }[] }
+          data: { labels: string[]; datasets: { data: ISet<any>[] }[] }
         ) {
-          return `${data.labels[item.index]}: ${data.datasets[item.datasetIndex].data[item.index].values}`;
+          const d = data.datasets[item.datasetIndex].data[item.index];
+          return `${data.labels[item.index]}: ${d.values || d.value.toLocaleString()}`;
         },
       },
     },
@@ -53,14 +54,19 @@ export class VennDiagramController extends DatasetController {
     this.updateElements(slices, 0, mode);
   }
 
+  protected computeLayout(size: IChartArea): IVennDiagramLayout {
+    const nSets = Math.log2(this._cachedMeta.data.length + 1);
+    return layout(nSets, size);
+  }
+
   updateElements(slices: ArcSlice[], start: number, mode?: 'reset' | 'normal') {
     const xScale = this._cachedMeta.xScale as { left: number; right: number };
     const yScale = this._cachedMeta.yScale as { top: number; bottom: number };
 
     const w = xScale.right - xScale.left;
     const h = yScale.bottom - yScale.top;
-    const nSets = Math.log2(this._cachedMeta.data.length + 1);
-    const l = layout(nSets, {
+
+    const l = this.computeLayout({
       x: xScale.left,
       y: yScale.top,
       w,
@@ -109,9 +115,9 @@ export class VennDiagramController extends DatasetController {
       ctx.fillText(labels[i], set.text.x, set.text.y);
     });
     ctx.textAlign = 'center';
-    const values = (this as any).getDataset().data as ISet<any>[];
+    const values = (this as any).getDataset().data as { value: number }[];
     l.intersections.forEach((l, i) => {
-      ctx.fillText(values[i].c.toLocaleString(), l.text.x, l.text.y);
+      ctx.fillText(values[i].value.toLocaleString(), l.text.x, l.text.y);
     });
 
     ctx.restore();

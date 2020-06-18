@@ -4,14 +4,14 @@ export interface IGenerateOptions {
 
 export interface IRawSet<T> {
   label: string;
-  values: ReadonlyArray<T>;
+  values: readonly T[];
 }
 
 export interface ISet<T> {
   label: string;
-  sets: ReadonlyArray<string>;
-  c: number;
-  values: ReadonlyArray<T>;
+  sets: readonly string[];
+  value: number;
+  values: readonly T[];
   degree: number;
 }
 
@@ -29,13 +29,13 @@ function generateSubset<T>(
   return {
     sets,
     label,
-    c: values.length,
+    value: values.length,
     values,
     degree: sets.length,
   };
 }
 
-export function extractSets<T>(data: ReadonlyArray<IRawSet<T>>, options: IGenerateOptions = {}) {
+export function extractSets<T>(data: readonly IRawSet<T>[], options: IGenerateOptions = {}) {
   const sets: ISet<T>[] = [];
   const lookup = new Map(data.map((s) => [s, new Set(s.values)]));
   const base = data.slice(0, 3);

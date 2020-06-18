@@ -96,5 +96,8 @@
     "chart.js": {
       "unplugged": true
     }
+  },
+  "dependencies": {
+    "@upsetjs/venn.js": "^1.2.0"
   }
 }
