@@ -72,7 +72,7 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf dist node_modules \"*.tgz\"",
     "compile": "tsc -p tsconfig.json --noEmit",
     "start": "npm run watch",
     "watch": "tsdx watch --noClean --name ChartVenn --format esm,umd",
