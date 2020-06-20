@@ -26,6 +26,7 @@ export default function euler(
     {
       width: size.w,
       height: size.h,
+      distinct: true,
     }
   );
   const singleSets = r.filter((d) => d.data.sets.length === 1);
