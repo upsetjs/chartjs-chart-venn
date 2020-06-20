@@ -56,8 +56,8 @@ export function extractSets<T>(data: readonly IRawSet<T>[], options: IGenerateOp
         generateSubset([base[1]], [base[0], base[2]], lookup),
         generateSubset([base[2]], [base[0], base[1]], lookup),
         generateSubset([base[0], base[1]], [base[2]], lookup),
+        generateSubset([base[0], base[2]], [base[1]], lookup),
         generateSubset([base[1], base[2]], [base[0]], lookup),
-        generateSubset([base[2], base[0]], [base[1]], lookup),
         generateSubset([base[0], base[1], base[2]], [], lookup)
       );
       break;
