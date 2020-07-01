@@ -12,6 +12,29 @@ export function center(circles: readonly ICircle[]) {
   };
 }
 
+function shiftPath(path: string | undefined, x: (v: number) => number, y: (v: number) => number) {
+  if (!path) {
+    return path;
+  }
+  const mapX = (v: string) => x(Number.parseFloat(v)).toString();
+  const mapY = (v: string) => y(Number.parseFloat(v)).toString();
+
+  const transformedPath = path
+    .split('\n')
+    .map((line) => {
+      const parts = line.trim().split(/[ ,]/);
+      if (parts[0] === 'M') {
+        return `${parts[0]} ${mapX(parts[1])} ${mapY(parts[2])}`;
+      }
+      if (parts[0] === 'A') {
+        return `${parts.slice(0, 6).join(' ')} ${mapX(parts[6])} ${mapY(parts[7])}`;
+      }
+      return line;
+    })
+    .join('\n');
+  return transformedPath;
+}
+
 function angleAtCircle(p: IPoint, c: IPoint) {
   const x = p.x - c.x;
   const y = p.y - c.y;
@@ -38,6 +61,8 @@ export default function euler(
     }
   );
   const singleSets = r.filter((d) => d.data.sets.length === 1);
+  const setNames = singleSets.map((d) => d.data.sets[0]);
+  const setCircles = singleSets.map((d) => d.circles[0]);
   const eulerCenter = center(singleSets.map((d) => d.circles[0]));
 
   const setData = singleSets.map((d) => {
@@ -56,14 +81,11 @@ export default function euler(
   const asArc = (a: IVennJSArc) => ({
     x2: a.p1.x + bb.x,
     y2: a.p1.y + bb.y,
-    ref: setData.findIndex(
-      (d) => Math.abs(d.cx - a.circle.x - bb.x) < 0.05 && Math.abs(d.cy - a.circle.y - bb.y) < 0.05
-    ),
+    ref: setCircles.findIndex((d) => Math.abs(d.x - a.circle.x) < 0.05 && Math.abs(d.y - a.circle.y) < 0.05),
     sweep: true,
     large: a.width > a.circle.radius,
     mode: 'i' as 'i',
   });
-
   return {
     sets: setData,
     intersections: r.map((d) => {
@@ -72,9 +94,10 @@ export default function euler(
         x: d.text.x + bb.x,
         y: d.text.y + bb.y,
       };
+      const subSets = d.data.sets.map((d) => setNames.indexOf(d));
       if (arcs.length === 0) {
         return {
-          sets: [], // TODO
+          sets: subSets,
           text,
           x1: 0,
           y1: 0,
@@ -84,21 +107,29 @@ export default function euler(
       if (arcs.length === 1) {
         const c = d.arcs[0].circle;
         return {
-          sets: [], // TODO
+          sets: subSets,
           text,
           x1: d.arcs[0].p2.x + bb.x,
           y1: c.y - c.radius + bb.y,
           arcs: [asArc(d.arcs[0]), Object.assign(asArc(d.arcs[0]), { y2: c.y - c.radius + bb.y })],
-          path: d.distinctPath || d.path,
+          path: shiftPath(
+            d.distinctPath || d.path,
+            (x) => x + bb.x,
+            (y) => y + bb.y
+          ),
         };
       }
       return {
         text,
-        sets: [], // TODO
+        sets: subSets,
         x1: d.arcs[0].p2.x + bb.x,
         y1: d.arcs[0].p2.y + bb.y,
         arcs: d.arcs.map((e) => asArc(e)),
-        path: d.distinctPath || d.path,
+        path: shiftPath(
+          d.distinctPath || d.path,
+          (x) => x + bb.x,
+          (y) => y + bb.y
+        ),
       };
     }),
   };
