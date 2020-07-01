@@ -1,7 +1,7 @@
 import { defaults, Element, registerElement } from '../chart';
-import { ITextArcSlice, ICircle, IEllipse } from '../model/interfaces';
+import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces';
 import { generateArcSlicePath } from '../model/generate';
-import { dist } from '../model/math';
+import { dist, DEG2RAD } from '../model/math';
 
 export interface IArcSliceOptions {
   backgroundColor: string;
@@ -26,7 +26,31 @@ export class ArcSlice extends Element {
   }
 
   inRange(mouseX: number, mouseY: number) {
-    const props = this.getProps<IArcSliceProps>(['arcs', 'refs']);
+    const props = this.getProps<IArcSliceProps>(['arcs', 'refs', 'sets']);
+
+    const usedSets = new Set(props.sets);
+
+    function checkRef(p: { cx: number; cy: number }, ref: IEllipse | ICircle, inside: boolean) {
+      if (isEllipse(ref)) {
+        //(x−a)2 + (y−b)2 = r2
+        const a = ref.rotation * DEG2RAD;
+        const x = p.cx - ref.cx;
+        const y = p.cy - ref.cy;
+        const d =
+          (x * Math.cos(a) + y * Math.sin(a)) ** 2 / ref.rx ** 2 +
+          (x * Math.sin(a) - y * Math.cos(a)) ** 2 / ref.ry ** 2;
+        if ((inside && d > 1) || (!inside && d < 1)) {
+          return false;
+        }
+      } else {
+        //(x−a)2 + (y−b)2 = r2
+        const d = dist(p, ref);
+        if ((inside && d > ref.r) || (!inside && d < ref.r)) {
+          return false;
+        }
+      }
+      return true;
+    }
 
     for (let i = 0; i < props.arcs.length; i++) {
       const arc = props.arcs[i];
@@ -36,9 +60,22 @@ export class ArcSlice extends Element {
         cy: Number.isNaN(mouseY) ? ref.cy : mouseY,
       };
 
-      // TODO
-      const d = dist(p, ref) - (ref as ICircle).r;
-      if ((arc.mode === 'i' && d > 0) || (arc.mode === 'o' && d < 0)) {
+      usedSets.delete(arc.ref);
+
+      if (!checkRef(p, ref, arc.mode === 'i')) {
+        return false;
+      }
+    }
+
+    const remaining = Array.from(usedSets);
+    for (let i = 0; i < remaining.length; i++) {
+      const ref = props.refs[remaining[i]];
+      const p = {
+        cx: Number.isNaN(mouseX) ? ref.cx : mouseX,
+        cy: Number.isNaN(mouseY) ? ref.cy : mouseY,
+      };
+
+      if (!checkRef(p, ref, true)) {
         return false;
       }
     }
