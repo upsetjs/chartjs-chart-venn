@@ -1,7 +1,7 @@
 import { Chart, DatasetController, registerController, patchControllerConfig, BarController } from '../chart';
 import { ArcSlice, IArcSliceOptions } from '../elements';
-import layout, { IVennDiagramLayout, IChartArea } from '../model/layout';
-import { IArcSlice } from '../model/interfaces';
+import layout, { IVennDiagramLayout } from '../model/layout';
+import { IArcSlice, IBoundingBox, ICircle, IEllipse } from '../model/interfaces';
 import { ISet } from '../data';
 
 export class VennDiagramController extends DatasetController {
@@ -53,7 +53,7 @@ export class VennDiagramController extends DatasetController {
     this.updateElements(slices, 0, mode);
   }
 
-  protected computeLayout(size: IChartArea): IVennDiagramLayout {
+  protected computeLayout(size: IBoundingBox): IVennDiagramLayout {
     const nSets = Math.log2(this._cachedMeta.data.length + 1);
     return layout(nSets, size);
   }
@@ -68,11 +68,8 @@ export class VennDiagramController extends DatasetController {
     const l = this.computeLayout({
       x: xScale.left,
       y: yScale.top,
-      w,
-      h,
-      cx: w / 2 + xScale.left,
-      cy: h / 2 + yScale.top,
-      r: Math.min(w, h) / 2,
+      width: w,
+      height: h,
     });
     (this._cachedMeta as any)._layout = l;
     (this._cachedMeta as any)._layoutFont = (xScale as any)._resolveTickFontOptions(0);
@@ -84,7 +81,12 @@ export class VennDiagramController extends DatasetController {
     for (let i = 0; i < slices.length; i++) {
       const slice = slices[i];
       const index = start + i;
-      const properties: IArcSlice & { options?: IArcSliceOptions } = Object.assign({}, l.intersections[index]);
+      const properties: IArcSlice & { options?: IArcSliceOptions; refs: (ICircle | IEllipse)[] } = Object.assign(
+        {
+          refs: l.sets,
+        },
+        l.intersections[index]
+      );
       if (includeOptions) {
         properties.options = (this.resolveDataElementOptions(index, mode) as unknown) as IArcSliceOptions;
       }
@@ -110,10 +112,12 @@ export class VennDiagramController extends DatasetController {
     ctx.textBaseline = 'middle';
     const labels = (this as any)._labels as string[];
     l.sets.forEach((set, i) => {
-      ctx.textAlign = set.angle > 200 ? 'right' : set.angle < 200 ? 'left' : 'center';
+      ctx.textAlign = set.align === 'middle' ? 'center' : set.align;
+      ctx.textBaseline = set.verticalAlign;
       ctx.fillText(labels[i], set.text.x, set.text.y);
     });
     ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     const values = (this as any).getDataset().data as { value: number }[];
     l.intersections.forEach((l, i) => {
       ctx.fillText(values[i].value.toLocaleString(), l.text.x, l.text.y);

@@ -19,5 +19,6 @@
   "typescript.tsdk": ".vscode/pnpify/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.detectIndentation": false,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "liveServer.settings.port": 5501
 }

@@ -1,5 +1,5 @@
 import { defaults, Element, registerElement } from '../chart';
-import { IArcSlice, ITextArcSlice } from '../model/interfaces';
+import { ITextArcSlice, ICircle, IEllipse } from '../model/interfaces';
 import { generateArcSlicePath } from '../model/generate';
 import { dist } from '../model/math';
 
@@ -7,6 +7,11 @@ export interface IArcSliceOptions {
   backgroundColor: string;
   borderColor: string;
   borderWidth: number;
+}
+
+export interface IArcSliceProps extends ITextArcSlice {
+  options?: IArcSliceOptions;
+  refs: (ICircle | IEllipse)[];
 }
 
 export class ArcSlice extends Element {
@@ -21,17 +26,19 @@ export class ArcSlice extends Element {
   }
 
   inRange(mouseX: number, mouseY: number) {
-    const props = this.getProps<IArcSlice>(['arcs']);
+    const props = this.getProps<IArcSliceProps>(['arcs', 'refs']);
 
     for (let i = 0; i < props.arcs.length; i++) {
       const arc = props.arcs[i];
+      const ref = props.refs[arc.ref];
       const p = {
-        cx: Number.isNaN(mouseX) ? arc.cx : mouseX,
-        cy: Number.isNaN(mouseY) ? arc.cy : mouseY,
+        cx: Number.isNaN(mouseX) ? ref.cx : mouseX,
+        cy: Number.isNaN(mouseY) ? ref.cy : mouseY,
       };
 
-      const d = dist(p, arc) - arc.r;
-      if ((arc.mode === 'inside' && d > 0) || (arc.mode === 'outside' && d < 0)) {
+      // TODO
+      const d = dist(p, ref) - (ref as ICircle).r;
+      if ((arc.mode === 'i' && d > 0) || (arc.mode === 'o' && d < 0)) {
         return false;
       }
     }
@@ -62,10 +69,10 @@ export class ArcSlice extends Element {
   draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
     const options = (this.options as unknown) as IArcSliceOptions;
-    const props = this.getProps<IArcSlice>(['x1', 'y1', 'arcs']);
+    const props = this.getProps<IArcSliceProps>(['x1', 'y1', 'arcs', 'refs']);
 
     ctx.beginPath();
-    const path = new Path2D(generateArcSlicePath(props));
+    const path = new Path2D(generateArcSlicePath(props, props.refs));
 
     if (options.backgroundColor) {
       ctx.fillStyle = options.backgroundColor;

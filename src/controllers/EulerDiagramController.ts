@@ -1,7 +1,8 @@
 import { Chart, patchControllerConfig, registerController } from '../chart';
-import { IChartArea, IVennDiagramLayout } from '../model/layout';
+import { IVennDiagramLayout } from '../model/layout';
 import { VennDiagramController } from './VennDiagramController';
 import euler from '../model/euler';
+import { IBoundingBox } from '../model/interfaces';
 
 export class EulerDiagramController extends VennDiagramController {
   static readonly id = 'euler';
@@ -13,7 +14,7 @@ export class EulerDiagramController extends VennDiagramController {
     return registerController(EulerDiagramController);
   }
 
-  protected computeLayout(size: IChartArea): IVennDiagramLayout {
+  protected computeLayout(size: IBoundingBox): IVennDiagramLayout {
     const sets = (this as any)._data as readonly { sets: readonly string[]; value: number }[];
     return euler(sets, size);
   }
