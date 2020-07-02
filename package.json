@@ -8,9 +8,9 @@
     "url": "https://www.sgratzl.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/sgratzl/chartjs-chart-venn",
+  "homepage": "https://github.com/upsetjschartjs-chart-venn",
   "bugs": {
-    "url": "https://github.com/sgratzl/chartjs-chart-venn/issues"
+    "url": "https://github.com/upsetjschartjs-chart-venn/issues"
   },
   "keywords": [
     "chart.js",
@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/sgratzl/chartjs-chart-venn.git"
+    "url": "https://github.com/upsetjschartjs-chart-venn.git"
   },
   "module": "dist/chartvenn.esm.js",
   "main": "dist/chartvenn.umd.development.js",

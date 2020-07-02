@@ -30,7 +30,7 @@ module.exports = {
     );
     config.output.banner = `/**
  * chartjs-chart-venn
- * https://github.com/sgratzl/chartjs-chart-venn
+ * https://github.com/upsetjs/chartjs-chart-venn
  *
  * Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
  */`;

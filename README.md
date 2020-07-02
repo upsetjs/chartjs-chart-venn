@@ -16,7 +16,7 @@ npm install --save chart.js@next chartjs-chart-venn
 
 ## Usage
 
-see [Samples](https://github.com/sgratzl/chartjs-chart-venn/tree/master/samples) on Github
+see [Samples](https://github.com/upsetjs/chartjs-chart-venn/tree/master/samples) on Github
 
 or at this [![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/ExPyZjG)
 
@@ -166,6 +166,6 @@ yarn release:pre
 [mit-url]: https://opensource.org/licenses/MIT
 [npm-image]: https://badge.fury.io/js/chartjs-chart-venn.svg
 [npm-url]: https://npmjs.org/package/chartjs-chart-venn
-[github-actions-image]: https://github.com/sgratzl/chartjs-chart-venn/workflows/ci/badge.svg
-[github-actions-url]: https://github.com/sgratzl/chartjs-chart-venn/actions
+[github-actions-image]: https://github.com/upsetjs/chartjs-chart-venn/workflows/ci/badge.svg
+[github-actions-url]: https://github.com/upsetjs/chartjs-chart-venn/actions
 [codepen]: https://img.shields.io/badge/CodePen-open-blue?logo=codepen
