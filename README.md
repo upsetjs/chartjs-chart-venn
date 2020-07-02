@@ -2,11 +2,13 @@
 
 [![NPM Package][npm-image]][npm-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-Chart.js module for charting venn diagrams with one, two, or three sets. Adding new chart type: `venn` and `euler`.
+Chart.js module for charting venn diagrams with up to five sets. Adding new chart type: `venn` and `euler`.
 
 **Works only with Chart.js >= 3.0.0**
 
 ![Sports Venn Diagram](https://user-images.githubusercontent.com/4129778/84571515-f32f9100-ad93-11ea-9354-039411eef43a.png)
+
+![five sets](https://user-images.githubusercontent.com/4129778/86374498-eca28400-bc84-11ea-8494-ea7d9cd11781.png)
 
 ## Install
 
