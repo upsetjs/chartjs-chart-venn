@@ -23,8 +23,6 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "outDir": "./dist",
-    "typeRoots": ["src/types", "./node_modules/@types"],
-    "types": ["chart.js", "jest", "node", "jest-image-snapshot"],
     "paths": {
       "@": ["./src"],
       "*": ["*", "node_modules/*"]

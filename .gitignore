@@ -15,5 +15,5 @@ npm-debug.log*
 /dist
 
 *.tgz
-/.vscode/pnpify
+/.vscode/extensions.json
 /docs

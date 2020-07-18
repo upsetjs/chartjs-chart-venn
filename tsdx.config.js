@@ -8,10 +8,11 @@ const pkg = JSON.parse(fs.readFileSync('./package.json'));
 module.exports = {
   rollup(config, options) {
     if (options.format === 'umd') {
-      config.input = './src/bundle.ts';
+      config.input = './src/index.umd.ts';
     }
 
     config.output.globals['chart.js'] = 'Chart';
+    config.output.globals['@sgratzl/chartjs-esm-facade'] = 'ChartESMFacade';
     config.output.globals['@upsetjs/venn.js'] = 'venn';
     const originalExternal = config.external;
     const external = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.peerDependencies || {}));

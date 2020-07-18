@@ -13,12 +13,11 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.nodePath": ".vscode/pnpify",
-  "prettier.prettierPath": ".vscode/pnpify/prettier/index.js",
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "files.eol": "\n",
-  "typescript.tsdk": ".vscode/pnpify/typescript/lib",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.detectIndentation": false,
-  "editor.tabSize": 2,
-  "liveServer.settings.port": 5501
+  "editor.tabSize": 2
 }

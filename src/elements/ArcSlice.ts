@@ -1,4 +1,4 @@
-import { defaults, Element, registerElement } from '../chart';
+import { Element, Rectangle, IVisualElement } from '@sgratzl/chartjs-esm-facade';
 import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces';
 import { generateArcSlicePath } from '../model/generate';
 import { dist, DEG2RAD } from '../model/math';
@@ -14,19 +14,14 @@ export interface IArcSliceProps extends ITextArcSlice {
   refs: (ICircle | IEllipse)[];
 }
 
-export class ArcSlice extends Element {
+export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implements IVisualElement {
   static readonly id = 'arcSlice';
-  static readonly _type = 'arcSlice';
-  static readonly defaults = /* #__PURE__ */ Object.assign({}, defaults.elements.rectangle, {
+  static readonly defaults = /* #__PURE__ */ Object.assign({}, Rectangle.defaults, {
     backgroundColor: '#efefef',
   });
 
-  static register() {
-    return registerElement(ArcSlice);
-  }
-
   inRange(mouseX: number, mouseY: number) {
-    const props = this.getProps<IArcSliceProps>(['arcs', 'refs', 'sets']);
+    const props = this.getProps(['arcs', 'refs', 'sets']);
 
     const usedSets = new Set(props.sets);
 
@@ -52,7 +47,7 @@ export class ArcSlice extends Element {
       return true;
     }
 
-    for (let i = 0; i < props.arcs.length; i++) {
+    for (let i = 0; i < props.arcs!.length; i++) {
       const arc = props.arcs[i];
       const ref = props.refs[arc.ref];
       const p = {
@@ -91,7 +86,7 @@ export class ArcSlice extends Element {
   }
 
   getCenterPoint() {
-    const arc = this.getProps<ITextArcSlice>(['text']);
+    const arc = this.getProps(['text']);
     return arc.text;
   }
 
@@ -106,7 +101,7 @@ export class ArcSlice extends Element {
   draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
     const options = (this.options as unknown) as IArcSliceOptions;
-    const props = this.getProps<IArcSliceProps>(['x1', 'y1', 'arcs', 'refs']);
+    const props = this.getProps(['x1', 'y1', 'arcs', 'refs']);
 
     ctx.beginPath();
     const path = new Path2D(generateArcSlicePath(props, props.refs));

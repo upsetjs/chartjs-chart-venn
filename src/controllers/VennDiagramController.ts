@@ -1,10 +1,18 @@
-import { Chart, DatasetController, registerController, patchControllerConfig, BarController } from '../chart';
+import {
+  Chart,
+  DatasetController,
+  BarController,
+  ITooltipItem,
+  UpdateMode,
+  ContextType,
+  ChartConfiguration,
+} from '@sgratzl/chartjs-esm-facade';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
 import { IArcSlice, IBoundingBox, ICircle, IEllipse } from '../model/interfaces';
-import { ISet } from '../data';
+import patchController from './patchController';
 
-export class VennDiagramController extends DatasetController {
+export class VennDiagramController extends DatasetController<ArcSlice> {
   static readonly id: string = 'venn';
 
   static readonly defaults = {
@@ -14,12 +22,10 @@ export class VennDiagramController extends DatasetController {
           // Title doesn't make sense for scatter since we format the data as a point
           return '';
         },
-        label(
-          item: { index: number; values: any[]; datasetIndex: number },
-          data: { labels: string[]; datasets: { data: ISet<any>[] }[] }
-        ) {
-          const d = data.datasets[item.datasetIndex].data[item.index];
-          return `${data.labels[item.index]}: ${d.values || d.value.toLocaleString()}`;
+        label(item: ITooltipItem) {
+          const labels = item.chart.data.labels! as string[];
+          const d = item.chart.data.datasets![item.datasetIndex].data![item.dataIndex]! as any;
+          return `${labels[item.dataIndex]}: ${d.values || d.value.toLocaleString()}`;
         },
       },
     },
@@ -37,16 +43,11 @@ export class VennDiagramController extends DatasetController {
         display: false,
       },
     },
+    dataElementType: ArcSlice.id,
+    dataElementOptions: BarController.defaults.dataElementOptions,
   };
 
-  static register() {
-    const p = VennDiagramController.prototype as any;
-    p.dataElementType = ArcSlice.register();
-    p.dataElementOptions = BarController.prototype.dataElementOptions;
-    return registerController(VennDiagramController);
-  }
-
-  update(mode?: 'reset' | 'normal') {
+  update(mode: UpdateMode) {
     super.update(mode);
     const meta = this._cachedMeta;
     const slices = ((meta.data || []) as unknown) as ArcSlice[];
@@ -58,7 +59,7 @@ export class VennDiagramController extends DatasetController {
     return layout(nSets, size);
   }
 
-  updateElements(slices: ArcSlice[], start: number, mode?: 'reset' | 'normal') {
+  updateElements(slices: ArcSlice[], start: number, mode: UpdateMode) {
     const xScale = this._cachedMeta.xScale as { left: number; right: number };
     const yScale = this._cachedMeta.yScale as { top: number; bottom: number };
 
@@ -97,9 +98,9 @@ export class VennDiagramController extends DatasetController {
 
   draw() {
     const meta = this._cachedMeta;
-    const elements = ((meta.data || []) as unknown) as ArcSlice[];
+    const elements = meta.data;
 
-    const ctx = this._ctx;
+    const ctx = this.chart.ctx;
     elements.forEach((elem) => elem.draw(ctx));
 
     ctx.save();
@@ -110,7 +111,7 @@ export class VennDiagramController extends DatasetController {
     ctx.font = font.string;
     ctx.fillStyle = font.color;
     ctx.textBaseline = 'middle';
-    const labels = (this as any)._labels as string[];
+    const labels = this.chart.data.labels! as string[];
     l.sets.forEach((set, i) => {
       ctx.textAlign = set.align === 'middle' ? 'center' : set.align;
       ctx.textBaseline = set.verticalAlign;
@@ -118,7 +119,7 @@ export class VennDiagramController extends DatasetController {
     });
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const values = (this as any).getDataset().data as { value: number }[];
+    const values = (this.getDataset() as any).data as { value: number }[];
     l.intersections.forEach((l, i) => {
       ctx.fillText(values[i].value.toLocaleString(), l.text.x, l.text.y);
     });
@@ -130,7 +131,7 @@ export class VennDiagramController extends DatasetController {
 export class VennDiagramChart extends Chart {
   static readonly id = VennDiagramController.id;
 
-  constructor(item: any, config: any) {
-    super(item, patchControllerConfig(config, VennDiagramController));
+  constructor(item: ContextType, config: Omit<ChartConfiguration, 'type'>) {
+    super(item, patchController(config, VennDiagramController, ArcSlice));
   }
 }
