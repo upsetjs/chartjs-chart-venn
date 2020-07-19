@@ -11,7 +11,7 @@ jobs:
         with:
           node-version: '12.x'
       - run: npm i -g yarn
-      - run: yarn set version berry
+      - run: yarn set version 2
       - run: cat .yarnrc_patch.yml >> .yarnrc.yml
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
@@ -22,14 +22,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn2-
       - run: yarn install
-        env:
-          CI: true
       - run: yarn build
-        env:
-          CI: true
       - run: yarn lint
-        env:
-          CI: true
       - run: yarn test
-        env:
-          CI: true

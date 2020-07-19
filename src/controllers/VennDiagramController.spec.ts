@@ -1,10 +1,13 @@
 /// <reference types="jest" />
 import { VennDiagramController } from './VennDiagramController';
 import { extractSets } from '../data';
+import { registry } from '@sgratzl/chartjs-esm-facade';
+import { ArcSlice } from '../elements';
 
 describe('venn', () => {
   beforeAll(() => {
-    VennDiagramController.register();
+    registry.addControllers(VennDiagramController);
+    registry.addElements(ArcSlice);
   });
   test('default', () => {
     const data = extractSets(

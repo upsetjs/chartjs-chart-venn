@@ -1,10 +1,13 @@
 /// <reference types="jest" />
+import { registry } from '@sgratzl/chartjs-esm-facade';
 import { EulerDiagramController } from './EulerDiagramController';
 import { extractSets } from '../data';
+import { ArcSlice } from '../elements';
 
 describe('Euler', () => {
   beforeAll(() => {
-    EulerDiagramController.register();
+    registry.addControllers(EulerDiagramController);
+    registry.addElements(ArcSlice);
   });
   test('default', () => {
     const data = extractSets(

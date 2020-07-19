@@ -4,7 +4,7 @@
 
 Chart.js module for charting venn diagrams with up to five sets. Adding new chart type: `venn` and `euler`.
 
-**Works only with Chart.js >= 3.0.0**
+**Works only with Chart.js >= 3.0.0-alpha.2**
 
 ![Sports Venn Diagram](https://user-images.githubusercontent.com/4129778/84571515-f32f9100-ad93-11ea-9354-039411eef43a.png)
 
@@ -13,7 +13,7 @@ Chart.js module for charting venn diagrams with up to five sets. Adding new char
 ## Install
 
 ```bash
-npm install --save chart.js@next chartjs-chart-venn
+npm install --save chart.js@next @sgratzl/chartjs-esm-facade@next chartjs-chart-venn
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ const config = {
 };
 ```
 
-Alternative datastructure
+Alternative data structure
 
 ```ts
 const config = {
@@ -118,11 +118,10 @@ The ESM build of the library supports tree shaking thus having no side effects. 
 Variant A:
 
 ```js
-import Chart from 'chart.js';
-import { VennDiagramController } from 'chartjs-chart-venn';
+import { Chart } from 'chart.js';
+import { VennDiagramController, ArcSlice } from 'chartjs-chart-venn';
 
-// register controller in chart.js and ensure the defaults are set
-VennDiagramController.register();
+Chart.register(VennDiagramController, ArcSlice);
 ...
 
 new Chart(ctx, {
@@ -148,7 +147,7 @@ npm i -g yarn
 yarn set version 2
 cat .yarnrc_patch.yml >> .yarnrc.yml
 yarn
-yarn pnpify --sdk
+yarn pnpify --sdk vscode
 ```
 
 ### Common commands
