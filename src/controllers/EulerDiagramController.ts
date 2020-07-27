@@ -20,7 +20,7 @@ export type IEulerDiagramControllerDatasetOptions = IVennDiagramControllerDatase
 
 export type IEulerDiagramControllerDataset<T = number> = IChartDataset<T, IEulerDiagramControllerDatasetOptions>;
 
-export type IEulerDiagramControllerConfiguration<T = number, L = string> = IChartConfiguration<
+export type IEulerDiagramControllerConfiguration<T = number[], L = string> = IChartConfiguration<
   'euler',
   T,
   L,

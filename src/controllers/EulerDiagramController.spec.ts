@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 import { registry } from '@sgratzl/chartjs-esm-facade';
-import { EulerDiagramController } from './EulerDiagramController';
-import { extractSets } from '../data';
+import { EulerDiagramController, IEulerDiagramControllerConfiguration } from './EulerDiagramController';
+import { extractSets, ISet } from '../data';
 import { ArcSlice } from '../elements';
 import matchChart from '../__tests__/matchChart';
 
@@ -22,15 +22,10 @@ describe('Euler', () => {
       }
     );
     expect(data.labels).toHaveLength(7);
-    return matchChart(
+    return matchChart<ISet<number>, string, IEulerDiagramControllerConfiguration<ISet<number>, string>>(
       {
         type: EulerDiagramController.id,
         data,
-        options: {
-          legend: {
-            display: false,
-          },
-        },
       },
       1000,
       500
