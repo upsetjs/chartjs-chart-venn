@@ -1,16 +1,11 @@
-import { Element, Rectangle, IVisualElement } from '@sgratzl/chartjs-esm-facade';
+import { Element, Rectangle, IVisualElement, ICommonOptions } from '@sgratzl/chartjs-esm-facade';
 import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces';
 import { generateArcSlicePath } from '../model/generate';
 import { dist, DEG2RAD } from '../model/math';
 
-export interface IArcSliceOptions {
-  backgroundColor: string;
-  borderColor: string;
-  borderWidth: number;
-}
+export interface IArcSliceOptions extends ICommonOptions {}
 
 export interface IArcSliceProps extends ITextArcSlice {
-  options?: IArcSliceOptions;
   refs: (ICircle | IEllipse)[];
 }
 
@@ -104,16 +99,43 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
     const props = this.getProps(['x1', 'y1', 'arcs', 'refs']);
 
     ctx.beginPath();
-    const path = new Path2D(generateArcSlicePath(props, props.refs));
+    let path: Path2D | undefined = undefined;
+    if (window.Path2D) {
+      path = new Path2D(generateArcSlicePath(props, props.refs));
+    } else {
+      // try old school
+      // M ${s.x1 - p},${s.y1 - p} ${s.arcs
+      //   .map((arc) => {
+      //     return `A ${rx - p} ${ry - p} ${rot} ${arc.large ? 1 : 0} ${arc.sweep ? 1 : 0} ${arc.x2 - p} ${arc.y2 - p}`;
+      //   }
+      ctx.beginPath();
+      ctx.moveTo(props.x1, props.y1);
+      for (const arc of props.arcs) {
+        const ref = props.refs[arc.ref];
+        const rx = isEllipse(ref) ? ref.rx : ref.r;
+        const ry = isEllipse(ref) ? ref.ry : ref.r;
+        const rot = isEllipse(ref) ? ref.rotation : 0;
+        // TODO angles
+        ctx.ellipse(ref.cx, ref.cy, rx, ry, rot, 0, Math.PI * 2, !arc.sweep);
+      }
+    }
 
     if (options.backgroundColor) {
       ctx.fillStyle = options.backgroundColor;
-      ctx.fill(path);
+      if (path) {
+        ctx.fill(path);
+      } else {
+        ctx.fill();
+      }
     }
     if (options.borderColor) {
       ctx.strokeStyle = options.borderColor;
       ctx.lineWidth = options.borderWidth;
-      ctx.stroke(path);
+      if (path) {
+        ctx.stroke(path);
+      } else {
+        ctx.stroke();
+      }
     }
 
     ctx.restore();

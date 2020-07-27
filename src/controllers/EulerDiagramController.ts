@@ -1,6 +1,6 @@
-import { Chart, ChartConfiguration, ContextType } from '@sgratzl/chartjs-esm-facade';
+import { Chart, IChartDataset, IChartConfiguration, ChartItem } from '@sgratzl/chartjs-esm-facade';
 import { IVennDiagramLayout } from '../model/layout';
-import { VennDiagramController } from './VennDiagramController';
+import { VennDiagramController, IVennDiagramControllerDatasetOptions } from './VennDiagramController';
 import euler from '../model/euler';
 import { IBoundingBox } from '../model/interfaces';
 import patchController from './patchController';
@@ -16,10 +16,21 @@ export class EulerDiagramController extends VennDiagramController {
   }
 }
 
-export class EulerDiagramChart extends Chart {
+export type IEulerDiagramControllerDatasetOptions = IVennDiagramControllerDatasetOptions;
+
+export type IEulerDiagramControllerDataset<T = number> = IChartDataset<T, IEulerDiagramControllerDatasetOptions>;
+
+export type IEulerDiagramControllerConfiguration<T = number, L = string> = IChartConfiguration<
+  'euler',
+  T,
+  L,
+  IEulerDiagramControllerDataset<T>
+>;
+
+export class EulerDiagramChart<T = number, L = string> extends Chart<T, L, IEulerDiagramControllerConfiguration<T, L>> {
   static readonly id = EulerDiagramController.id;
 
-  constructor(item: ContextType, config: Omit<ChartConfiguration, 'type'>) {
-    super(item, patchController(config, EulerDiagramController, ArcSlice));
+  constructor(item: ChartItem, config: Omit<IEulerDiagramControllerConfiguration<T, L>, 'type'>) {
+    super(item, patchController('euler', config, EulerDiagramController, ArcSlice));
   }
 }

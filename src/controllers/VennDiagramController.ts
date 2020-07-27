@@ -4,8 +4,12 @@ import {
   BarController,
   ITooltipItem,
   UpdateMode,
-  ContextType,
-  ChartConfiguration,
+  ChartItem,
+  ScriptableAndArrayOptions,
+  IControllerDatasetOptions,
+  ICommonHoverOptions,
+  IChartDataset,
+  IChartConfiguration,
 } from '@sgratzl/chartjs-esm-facade';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
@@ -128,10 +132,24 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
   }
 }
 
-export class VennDiagramChart extends Chart {
+export interface IVennDiagramControllerDatasetOptions
+  extends IControllerDatasetOptions,
+    ScriptableAndArrayOptions<IArcSliceOptions>,
+    ScriptableAndArrayOptions<ICommonHoverOptions> {}
+
+export type IVennDiagramControllerDataset<T = number> = IChartDataset<T, IVennDiagramControllerDatasetOptions>;
+
+export type IVennDiagramControllerConfiguration<T = number, L = string> = IChartConfiguration<
+  'venn',
+  T,
+  L,
+  IVennDiagramControllerDataset<T>
+>;
+
+export class VennDiagramChart<T = number, L = string> extends Chart<T, L, IVennDiagramControllerConfiguration<T, L>> {
   static readonly id = VennDiagramController.id;
 
-  constructor(item: ContextType, config: Omit<ChartConfiguration, 'type'>) {
-    super(item, patchController(config, VennDiagramController, ArcSlice));
+  constructor(item: ChartItem, config: Omit<IVennDiagramControllerConfiguration<T, L>, 'type'>) {
+    super(item, patchController('venn', config, VennDiagramController, ArcSlice));
   }
 }
