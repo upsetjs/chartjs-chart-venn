@@ -115,7 +115,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
         const rx = isEllipse(ref) ? ref.rx : ref.r;
         const ry = isEllipse(ref) ? ref.ry : ref.r;
         const rot = isEllipse(ref) ? ref.rotation : 0;
-        // TODO angles
+        // no proper angle rotation
         ctx.ellipse(ref.cx, ref.cy, rx, ry, rot, 0, Math.PI * 2, !arc.sweep);
       }
     }

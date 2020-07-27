@@ -13,9 +13,9 @@ describe('venn', () => {
   test('default', () => {
     const data = extractSets(
       [
-        { label: 'Soccer', values: ['alex', 'casey', 'drew', 'hunter'] },
-        { label: 'Tennis', values: ['casey', 'drew', 'jade'] },
-        { label: 'Volleyball', values: ['drew', 'glen', 'jade'] },
+        { label: '', values: ['alex', 'casey', 'drew', 'hunter'] },
+        { label: '', values: ['casey', 'drew', 'jade'] },
+        { label: '', values: ['drew', 'glen', 'jade'] },
       ],
       {
         label: 'Sports',

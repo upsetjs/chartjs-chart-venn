@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 /// <reference types="node" />
 
-import { Chart, IChartConfiguration } from '@sgratzl/chartjs-esm-facade';
+import { Chart, IChartConfiguration, defaults } from '@sgratzl/chartjs-esm-facade';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
 expect.extend({ toMatchImageSnapshot });
@@ -29,14 +29,16 @@ export default async function matchChart<
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
+  defaults.font.family = 'Courier New';
   config.options = Object.assign(
     {
       responsive: false,
       animation: false,
-      color: 'red',
-      font: {
-        color: 'green',
-        family: "'Arial', sans-serif",
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
       },
     },
     config.options || {}
