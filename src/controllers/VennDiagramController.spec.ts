@@ -3,6 +3,7 @@ import { VennDiagramController } from './VennDiagramController';
 import { extractSets } from '../data';
 import { registry } from '@sgratzl/chartjs-esm-facade';
 import { ArcSlice } from '../elements';
+import matchChart from '../__tests__/matchChart';
 
 describe('venn', () => {
   beforeAll(() => {
@@ -21,18 +22,18 @@ describe('venn', () => {
       }
     );
     expect(data.labels).toHaveLength(7);
-    // return matchChart(
-    //   {
-    //     type: VennDiagramController.id,
-    //     data,
-    //     options: {
-    //       legend: {
-    //         display: false,
-    //       },
-    //     },
-    //   },
-    //   1000,
-    //   500
-    // );
+    return matchChart(
+      {
+        type: VennDiagramController.id,
+        data,
+        options: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+      1000,
+      500
+    );
   });
 });

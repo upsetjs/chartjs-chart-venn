@@ -3,6 +3,7 @@ import { registry } from '@sgratzl/chartjs-esm-facade';
 import { EulerDiagramController } from './EulerDiagramController';
 import { extractSets } from '../data';
 import { ArcSlice } from '../elements';
+import matchChart from '../__tests__/matchChart';
 
 describe('Euler', () => {
   beforeAll(() => {
@@ -21,18 +22,18 @@ describe('Euler', () => {
       }
     );
     expect(data.labels).toHaveLength(7);
-    // return matchChart(
-    //   {
-    //     type: EulerDiagramController.id,
-    //     data,
-    //     options: {
-    //       legend: {
-    //         display: false,
-    //       },
-    //     },
-    //   },
-    //   1000,
-    //   500
-    // );
+    return matchChart(
+      {
+        type: EulerDiagramController.id,
+        data,
+        options: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+      1000,
+      500
+    );
   });
 });

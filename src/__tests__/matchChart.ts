@@ -1,7 +1,8 @@
 /// <reference types="jest" />
 /// <reference types="node" />
 
-import { helpers, Chart } from '../chart';
+import { Chart } from '@sgratzl/chartjs-esm-facade';
+// import 'path2d-polyfill';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
 expect.extend({ toMatchImageSnapshot });
@@ -35,10 +36,9 @@ export default async function matchChart(config: any, width = 300, height = 300,
   );
   const ctx = canvas.getContext('2d')!;
 
-  // sync
-  helpers.requestAnimFrame = (c: () => void) => c();
-
   new Chart(ctx, config);
+
+  await new Promise((resolve) => setTimeout(resolve, 100));
 
   const image = await toBuffer(canvas);
   expect(image).toMatchImageSnapshot(matchOptions);
