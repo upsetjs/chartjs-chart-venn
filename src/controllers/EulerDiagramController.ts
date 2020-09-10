@@ -1,4 +1,4 @@
-import { Chart, IChartDataset, IChartConfiguration, ChartItem } from '@sgratzl/chartjs-esm-facade';
+import { Chart, IChartDataset, IChartConfiguration, ChartItem } from 'chart.js';
 import { IVennDiagramLayout } from '../model/layout';
 import { VennDiagramController, IVennDiagramControllerDatasetOptions } from './VennDiagramController';
 import euler from '../model/euler';

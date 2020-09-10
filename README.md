@@ -4,7 +4,7 @@
 
 Chart.js module for charting venn diagrams with up to five sets. Adding new chart type: `venn` and `euler`.
 
-**Works only with Chart.js >= 3.0.0-alpha.2**
+**Works only with Chart.js >= 3.0.0-beta**
 
 ![Sports Venn Diagram](https://user-images.githubusercontent.com/4129778/84571515-f32f9100-ad93-11ea-9354-039411eef43a.png)
 
@@ -13,7 +13,7 @@ Chart.js module for charting venn diagrams with up to five sets. Adding new char
 ## Install
 
 ```bash
-npm install --save chart.js@next @sgratzl/chartjs-esm-facade@next chartjs-chart-venn
+npm install --save chart.js@next chartjs-chart-venn
 ```
 
 ## Usage

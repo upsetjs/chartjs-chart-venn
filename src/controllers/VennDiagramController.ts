@@ -10,7 +10,7 @@ import {
   ICommonHoverOptions,
   IChartDataset,
   IChartConfiguration,
-} from '@sgratzl/chartjs-esm-facade';
+} from 'chart.js';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
 import { IArcSlice, IBoundingBox, ICircle, IEllipse } from '../model/interfaces';
@@ -80,8 +80,10 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     (this._cachedMeta as any)._layoutFont = (xScale as any)._resolveTickFontOptions(0);
 
     const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(mode || 'normal', slices[start], firstOpts);
+    const sharedOptions = this.getSharedOptions(firstOpts) as any;
     const includeOptions = this.includeOptions(mode, sharedOptions);
+
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
     for (let i = 0; i < slices.length; i++) {
       const slice = slices[i];
@@ -93,11 +95,11 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
         l.intersections[index]
       );
       if (includeOptions) {
-        properties.options = (this.resolveDataElementOptions(index, mode) as unknown) as IArcSliceOptions;
+        properties.options =
+          sharedOptions || ((this.resolveDataElementOptions(index, mode) as unknown) as IArcSliceOptions);
       }
       this.updateElement(slice, index, properties as any, mode);
     }
-    this.updateSharedOptions(sharedOptions, mode);
   }
 
   draw() {

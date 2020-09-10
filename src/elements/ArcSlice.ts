@@ -1,9 +1,9 @@
-import { Element, Rectangle, IVisualElement, ICommonOptions } from '@sgratzl/chartjs-esm-facade';
+import { Element, Rectangle, IVisualElement, ICommonOptions } from 'chart.js';
 import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces';
 import { generateArcSlicePath } from '../model/generate';
 import { dist, DEG2RAD } from '../model/math';
 
-export interface IArcSliceOptions extends ICommonOptions {}
+export type IArcSliceOptions = ICommonOptions;
 
 export interface IArcSliceProps extends ITextArcSlice {
   refs: (ICircle | IEllipse)[];

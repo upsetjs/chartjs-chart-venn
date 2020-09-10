@@ -4,15 +4,16 @@
     <title>Chart</title>
   </head>
   <body>
-    <div id="container" style="width: 75%;">
+    <div id="container" style="width: 75%">
       <canvas id="canvas"></canvas>
     </div>
     <script defer src="https://unpkg.com/es-module-shims"></script>
     <script type="importmap-shim">
       {
         "imports": {
-          "@sgratzl/chartjs-esm-facade": "https://unpkg.com/@sgratzl/chartjs-esm-facade@3.0.0-alpha.2?module",
-          "chartjs-chart-venn": "../dist/chartvenn.esm.js"
+          "chart.js": "https://unpkg.com/chart.js@3.0.0-beta?module",
+          "@upsetjs/venn.js": "https://unpkg.com/@upsetjs/venn.js?module",
+          "chartjs-chart-venn": "../build/index.esm.js"
         }
       }
     </script>

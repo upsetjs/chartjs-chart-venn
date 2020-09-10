@@ -1,9 +1,9 @@
 /// <reference types="jest" />
-import { registry } from '@sgratzl/chartjs-esm-facade';
+import { registry } from 'chart.js';
 import { EulerDiagramController, IEulerDiagramControllerConfiguration } from './EulerDiagramController';
 import { extractSets, ISet } from '../data';
 import { ArcSlice } from '../elements';
-import matchChart from '../__tests__/matchChart';
+import createChart from '../__tests__/createChart';
 
 describe('Euler', () => {
   beforeAll(() => {
@@ -22,13 +22,13 @@ describe('Euler', () => {
       }
     );
     expect(data.labels).toHaveLength(7);
-    return matchChart<ISet<number>, string, IEulerDiagramControllerConfiguration<ISet<number>, string>>(
+    return createChart<ISet<number>, string, IEulerDiagramControllerConfiguration<ISet<number>, string>>(
       {
         type: EulerDiagramController.id,
         data,
       },
       1000,
       500
-    );
+    ).toMatchImageSnapshot();
   });
 });

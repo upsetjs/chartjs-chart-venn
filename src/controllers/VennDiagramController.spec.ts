@@ -1,9 +1,9 @@
 /// <reference types="jest" />
 import { VennDiagramController, IVennDiagramControllerConfiguration } from './VennDiagramController';
 import { extractSets, ISet } from '../data';
-import { registry } from '@sgratzl/chartjs-esm-facade';
+import { registry } from 'chart.js';
 import { ArcSlice } from '../elements';
-import matchChart from '../__tests__/matchChart';
+import createChart from '../__tests__/createChart';
 
 describe('venn', () => {
   beforeAll(() => {
@@ -22,7 +22,7 @@ describe('venn', () => {
       }
     );
     expect(data.labels).toHaveLength(7);
-    return matchChart<ISet<string>, string, IVennDiagramControllerConfiguration<ISet<string>, string>>(
+    return createChart<ISet<string>, string, IVennDiagramControllerConfiguration<ISet<string>, string>>(
       {
         type: VennDiagramController.id as 'venn',
         data,
@@ -30,6 +30,6 @@ describe('venn', () => {
       },
       1000,
       500
-    );
+    ).toMatchImageSnapshot();
   });
 });
