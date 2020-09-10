@@ -51,6 +51,11 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     dataElementOptions: BarController.defaults.dataElementOptions,
   };
 
+  initialize() {
+    super.initialize();
+    this.enableOptionSharing = true;
+  }
+
   update(mode: UpdateMode) {
     super.update(mode);
     const meta = this._cachedMeta;
@@ -83,8 +88,6 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     const sharedOptions = this.getSharedOptions(firstOpts) as any;
     const includeOptions = this.includeOptions(mode, sharedOptions);
 
-    this.updateSharedOptions(sharedOptions, mode, firstOpts);
-
     for (let i = 0; i < slices.length; i++) {
       const slice = slices[i];
       const index = start + i;
@@ -100,6 +103,7 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
       }
       this.updateElement(slice, index, properties as any, mode);
     }
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
 
   draw() {
