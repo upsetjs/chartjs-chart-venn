@@ -1,4 +1,4 @@
-import { Chart, IChartDataset, IChartConfiguration, ChartItem } from 'chart.js';
+import { Chart, IChartConfiguration, ChartItem, ICartesianScaleTypeRegistry, ICoreChartOptions } from 'chart.js';
 import { IVennDiagramLayout } from '../model/layout';
 import { VennDiagramController, IVennDiagramControllerDatasetOptions } from './VennDiagramController';
 import euler from '../model/euler';
@@ -18,19 +18,24 @@ export class EulerDiagramController extends VennDiagramController {
 
 export type IEulerDiagramControllerDatasetOptions = IVennDiagramControllerDatasetOptions;
 
-export type IEulerDiagramControllerDataset<T = number> = IChartDataset<T, IEulerDiagramControllerDatasetOptions>;
+declare module 'chart.js' {
+  enum ChartTypeEnum {
+    euler = 'euler',
+  }
+  interface IChartTypeRegistry {
+    euler: {
+      chartOptions: ICoreChartOptions;
+      datasetOptions: IEulerDiagramControllerDatasetOptions;
+      defaultDataPoint: number[];
+      scales: keyof ICartesianScaleTypeRegistry;
+    };
+  }
+}
 
-export type IEulerDiagramControllerConfiguration<T = number[], L = string> = IChartConfiguration<
-  'euler',
-  T,
-  L,
-  IEulerDiagramControllerDataset<T>
->;
+export class EulerDiagramChart<DATA extends unknown[] = number[], LABEL = string> extends Chart<'euler', DATA, LABEL> {
+  static id = EulerDiagramController.id;
 
-export class EulerDiagramChart<T = number, L = string> extends Chart<T, L, IEulerDiagramControllerConfiguration<T, L>> {
-  static readonly id = EulerDiagramController.id;
-
-  constructor(item: ChartItem, config: Omit<IEulerDiagramControllerConfiguration<T, L>, 'type'>) {
+  constructor(item: ChartItem, config: Omit<IChartConfiguration<'euler', DATA, LABEL>, 'type'>) {
     super(item, patchController('euler', config, EulerDiagramController, ArcSlice));
   }
 }

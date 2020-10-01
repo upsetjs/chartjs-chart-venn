@@ -8,8 +8,10 @@ import {
   ScriptableAndArrayOptions,
   IControllerDatasetOptions,
   ICommonHoverOptions,
-  IChartDataset,
   IChartConfiguration,
+  ICartesianScaleTypeRegistry,
+  ICoreChartOptions,
+  LinearScale,
 } from 'chart.js';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
@@ -60,7 +62,7 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     super.update(mode);
     const meta = this._cachedMeta;
     const slices = ((meta.data || []) as unknown) as ArcSlice[];
-    this.updateElements(slices, 0, mode);
+    this.updateElements(slices, 0, slices.length, mode);
   }
 
   protected computeLayout(size: IBoundingBox): IVennDiagramLayout {
@@ -68,7 +70,7 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     return layout(nSets, size);
   }
 
-  updateElements(slices: ArcSlice[], start: number, mode: UpdateMode) {
+  updateElements(slices: ArcSlice[], start: number, count: number, mode: UpdateMode) {
     const xScale = this._cachedMeta.xScale as { left: number; right: number };
     const yScale = this._cachedMeta.yScale as { top: number; bottom: number };
 
@@ -88,20 +90,19 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     const sharedOptions = this.getSharedOptions(firstOpts) as any;
     const includeOptions = this.includeOptions(mode, sharedOptions);
 
-    for (let i = 0; i < slices.length; i++) {
+    for (let i = start; i < start + count; i++) {
       const slice = slices[i];
-      const index = start + i;
       const properties: IArcSlice & { options?: IArcSliceOptions; refs: (ICircle | IEllipse)[] } = Object.assign(
         {
           refs: l.sets,
         },
-        l.intersections[index]
+        l.intersections[i]
       );
       if (includeOptions) {
         properties.options =
-          sharedOptions || ((this.resolveDataElementOptions(index, mode) as unknown) as IArcSliceOptions);
+          sharedOptions || ((this.resolveDataElementOptions(i, mode) as unknown) as IArcSliceOptions);
       }
-      this.updateElement(slice, index, properties as any, mode);
+      this.updateElement(slice, i, properties as any, mode);
     }
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
@@ -143,19 +144,24 @@ export interface IVennDiagramControllerDatasetOptions
     ScriptableAndArrayOptions<IArcSliceOptions>,
     ScriptableAndArrayOptions<ICommonHoverOptions> {}
 
-export type IVennDiagramControllerDataset<T = number> = IChartDataset<T, IVennDiagramControllerDatasetOptions>;
+declare module 'chart.js' {
+  enum ChartTypeEnum {
+    venn = 'venn',
+  }
+  interface IChartTypeRegistry {
+    venn: {
+      chartOptions: ICoreChartOptions;
+      datasetOptions: IVennDiagramControllerDatasetOptions;
+      defaultDataPoint: number[];
+      scales: keyof ICartesianScaleTypeRegistry;
+    };
+  }
+}
 
-export type IVennDiagramControllerConfiguration<T = number, L = string> = IChartConfiguration<
-  'venn',
-  T,
-  L,
-  IVennDiagramControllerDataset<T>
->;
+export class VennDiagramChart<DATA extends unknown[] = number[], LABEL = string> extends Chart<'venn', DATA, LABEL> {
+  static id = VennDiagramController.id as 'venn';
 
-export class VennDiagramChart<T = number, L = string> extends Chart<T, L, IVennDiagramControllerConfiguration<T, L>> {
-  static readonly id = VennDiagramController.id;
-
-  constructor(item: ChartItem, config: Omit<IVennDiagramControllerConfiguration<T, L>, 'type'>) {
-    super(item, patchController('venn', config, VennDiagramController, ArcSlice));
+  constructor(item: ChartItem, config: Omit<IChartConfiguration<'venn', DATA, LABEL>, 'type'>) {
+    super(item, patchController('venn', config, VennDiagramController, ArcSlice, [LinearScale]));
   }
 }

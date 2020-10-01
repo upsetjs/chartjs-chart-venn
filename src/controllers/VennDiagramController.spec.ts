@@ -1,6 +1,6 @@
 /// <reference types="jest" />
-import { VennDiagramController, IVennDiagramControllerConfiguration } from './VennDiagramController';
-import { extractSets, ISet } from '../data';
+import { VennDiagramController } from './VennDiagramController';
+import { extractSets } from '../data';
 import { registry } from 'chart.js';
 import { ArcSlice } from '../elements';
 import createChart from '../__tests__/createChart';
@@ -22,7 +22,7 @@ describe('venn', () => {
       }
     );
     expect(data.labels).toHaveLength(7);
-    return createChart<ISet<string>, string, IVennDiagramControllerConfiguration<ISet<string>, string>>(
+    return createChart(
       {
         type: VennDiagramController.id as 'venn',
         data,

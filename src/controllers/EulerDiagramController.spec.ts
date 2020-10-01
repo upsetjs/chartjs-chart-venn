@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 import { registry } from 'chart.js';
-import { EulerDiagramController, IEulerDiagramControllerConfiguration } from './EulerDiagramController';
-import { extractSets, ISet } from '../data';
+import { EulerDiagramController } from './EulerDiagramController';
+import { extractSets } from '../data';
 import { ArcSlice } from '../elements';
 import createChart from '../__tests__/createChart';
 
@@ -22,7 +22,7 @@ describe('Euler', () => {
       }
     );
     expect(data.labels).toHaveLength(7);
-    return createChart<ISet<number>, string, IEulerDiagramControllerConfiguration<ISet<number>, string>>(
+    return createChart(
       {
         type: EulerDiagramController.id,
         data,
