@@ -2,15 +2,15 @@ import {
   Chart,
   DatasetController,
   BarController,
-  ITooltipItem,
+  TooltipItem,
   UpdateMode,
   ChartItem,
   ScriptableAndArrayOptions,
-  IControllerDatasetOptions,
-  ICommonHoverOptions,
-  IChartConfiguration,
-  ICartesianScaleTypeRegistry,
-  ICoreChartOptions,
+  ControllerDatasetOptions,
+  CommonHoverOptions,
+  ChartConfiguration,
+  CartesianScaleTypeRegistry,
+  CoreChartOptions,
   LinearScale,
 } from 'chart.js';
 import { ArcSlice, IArcSliceOptions } from '../elements';
@@ -28,7 +28,7 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
           // Title doesn't make sense for scatter since we format the data as a point
           return '';
         },
-        label(item: ITooltipItem) {
+        label(item: TooltipItem) {
           const labels = item.chart.data.labels! as string[];
           const d = item.chart.data.datasets![item.datasetIndex].data![item.dataIndex]! as any;
           return `${labels[item.dataIndex]}: ${d.values || d.value.toLocaleString()}`;
@@ -140,20 +140,17 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
 }
 
 export interface IVennDiagramControllerDatasetOptions
-  extends IControllerDatasetOptions,
+  extends ControllerDatasetOptions,
     ScriptableAndArrayOptions<IArcSliceOptions>,
-    ScriptableAndArrayOptions<ICommonHoverOptions> {}
+    ScriptableAndArrayOptions<CommonHoverOptions> {}
 
 declare module 'chart.js' {
-  enum ChartTypeEnum {
-    venn = 'venn',
-  }
-  interface IChartTypeRegistry {
+  interface ChartTypeRegistry {
     venn: {
-      chartOptions: ICoreChartOptions;
+      chartOptions: CoreChartOptions;
       datasetOptions: IVennDiagramControllerDatasetOptions;
       defaultDataPoint: number[];
-      scales: keyof ICartesianScaleTypeRegistry;
+      scales: keyof CartesianScaleTypeRegistry;
     };
   }
 }
@@ -161,7 +158,7 @@ declare module 'chart.js' {
 export class VennDiagramChart<DATA extends unknown[] = number[], LABEL = string> extends Chart<'venn', DATA, LABEL> {
   static id = VennDiagramController.id as 'venn';
 
-  constructor(item: ChartItem, config: Omit<IChartConfiguration<'venn', DATA, LABEL>, 'type'>) {
+  constructor(item: ChartItem, config: Omit<ChartConfiguration<'venn', DATA, LABEL>, 'type'>) {
     super(item, patchController('venn', config, VennDiagramController, ArcSlice, [LinearScale]));
   }
 }

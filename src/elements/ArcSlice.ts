@@ -1,17 +1,17 @@
-import { Element, Rectangle, IVisualElement, ICommonOptions } from 'chart.js';
+import { Element, BarElement, VisualElement, CommonOptions } from 'chart.js';
 import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces';
 import { generateArcSlicePath } from '../model/generate';
 import { dist, DEG2RAD } from '../model/math';
 
-export type IArcSliceOptions = ICommonOptions;
+export type IArcSliceOptions = CommonOptions;
 
 export interface IArcSliceProps extends ITextArcSlice {
   refs: (ICircle | IEllipse)[];
 }
 
-export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implements IVisualElement {
+export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implements VisualElement {
   static readonly id = 'arcSlice';
-  static readonly defaults = /* #__PURE__ */ Object.assign({}, Rectangle.defaults, {
+  static readonly defaults = /* #__PURE__ */ Object.assign({}, BarElement.defaults, {
     backgroundColor: '#efefef',
   });
 
