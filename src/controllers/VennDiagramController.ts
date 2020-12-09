@@ -22,16 +22,18 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
   static readonly id: string = 'venn';
 
   static readonly defaults = {
-    tooltips: {
-      callbacks: {
-        title() {
-          // Title doesn't make sense for scatter since we format the data as a point
-          return '';
-        },
-        label(item: TooltipItem) {
-          const labels = item.chart.data.labels! as string[];
-          const d = item.chart.data.datasets![item.datasetIndex].data![item.dataIndex]! as any;
-          return `${labels[item.dataIndex]}: ${d.values || d.value.toLocaleString()}`;
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title() {
+            // Title doesn't make sense for scatter since we format the data as a point
+            return '';
+          },
+          label(item: TooltipItem) {
+            const labels = item.chart.data.labels! as string[];
+            const d = item.chart.data.datasets![item.datasetIndex].data![item.dataIndex]! as any;
+            return `${labels[item.dataIndex]}: ${d.values || d.value.toLocaleString()}`;
+          },
         },
       },
     },
@@ -84,7 +86,10 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
       height: h,
     });
     (this._cachedMeta as any)._layout = l;
-    (this._cachedMeta as any)._layoutFont = (xScale as any)._resolveTickFontOptions(0);
+    (this._cachedMeta as any)._layoutFont = {
+      ...(xScale as any)._resolveTickFontOptions(0),
+      color: (xScale as any).options.ticks.color,
+    };
 
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(firstOpts) as any;
