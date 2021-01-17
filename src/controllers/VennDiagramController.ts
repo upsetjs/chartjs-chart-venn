@@ -12,6 +12,7 @@ import {
   CartesianScaleTypeRegistry,
   CoreChartOptions,
   LinearScale,
+  ScriptableContext,
 } from 'chart.js';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
@@ -146,8 +147,8 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
 
 export interface IVennDiagramControllerDatasetOptions
   extends ControllerDatasetOptions,
-    ScriptableAndArrayOptions<IArcSliceOptions>,
-    ScriptableAndArrayOptions<CommonHoverOptions> {}
+    ScriptableAndArrayOptions<IArcSliceOptions, ScriptableContext>,
+    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext> {}
 
 declare module 'chart.js' {
   interface ChartTypeRegistry {
