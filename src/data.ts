@@ -22,9 +22,11 @@ function generateSubset<T>(
 ): ISet<T> {
   const sets = members.map((s) => s.label);
   const label = sets.join(' ∩ ');
-  const others = members.slice(1).map((s) => lookup.get(s)!);
-  const not = notMembers.map((s) => lookup.get(s)!);
-  const values: T[] = members[0].values.filter((v) => others.every((o) => o.has(v)) && not.every((o) => !o.has(v)));
+  const others = members.slice(1).map((s) => lookup.get(s));
+  const not = notMembers.map((s) => lookup.get(s));
+  const values: T[] = members[0].values.filter(
+    (v) => others.every((o) => o != null && o.has(v)) && not.every((o) => o != null && !o.has(v))
+  );
 
   return {
     sets,
@@ -35,7 +37,10 @@ function generateSubset<T>(
   };
 }
 
-export function extractSets<T>(data: readonly IRawSet<T>[], options: IGenerateOptions = {}) {
+export function extractSets<T>(
+  data: readonly IRawSet<T>[],
+  options: IGenerateOptions = {}
+): { labels: string[]; datasets: [{ label: string; data: ISet<T>[] }] } {
   const sets: ISet<T>[] = [];
   const lookup = new Map(data.map((s) => [s, new Set(s.values)]));
   const base = data.slice(0, 5);

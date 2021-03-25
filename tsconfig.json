@@ -8,7 +8,7 @@
     "sourceMap": true,
     "strict": true,
     "skipLibCheck": true,
-    "importsNotUsedAsValues": "remove",
+    "importsNotUsedAsValues": "error",
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "strictBindCallApply": true,
@@ -29,7 +29,7 @@
       "*": ["*", "node_modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"],
 
   "typedocOptions": {
     "name": "TSLibrary",

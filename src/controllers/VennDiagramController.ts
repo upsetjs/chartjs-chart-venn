@@ -1,7 +1,6 @@
 import {
   Chart,
   DatasetController,
-  BarController,
   TooltipItem,
   UpdateMode,
   ChartItem,
@@ -16,13 +15,17 @@ import {
 } from 'chart.js';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
-import { IArcSlice, IBoundingBox, ICircle, IEllipse } from '../model/interfaces';
+import type { IArcSlice, IBoundingBox, ICircle, IEllipse } from '../model/interfaces';
 import patchController from './patchController';
 
-export class VennDiagramController extends DatasetController<ArcSlice> {
+export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   static readonly id: string = 'venn';
 
   static readonly defaults = {
+    dataElementType: ArcSlice.id,
+  };
+
+  static readonly overrides: any = {
     plugins: {
       tooltip: {
         callbacks: {
@@ -30,10 +33,10 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
             // Title doesn't make sense for scatter since we format the data as a point
             return '';
           },
-          label(item: TooltipItem) {
-            const labels = item.chart.data.labels! as string[];
-            const d = item.chart.data.datasets![item.datasetIndex].data![item.dataIndex]! as any;
-            return `${labels[item.dataIndex]}: ${d.values || d.value.toLocaleString()}`;
+          label(item: TooltipItem<'venn'>) {
+            const labels = item.chart.data.labels as string[];
+            const d = item.chart.data.datasets?.[item.datasetIndex].data?.[item.dataIndex] as any;
+            return `${labels[item.dataIndex]}: ${d ? d.values || d.value.toLocaleString() : ''}`;
           },
         },
       },
@@ -52,16 +55,14 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
         display: false,
       },
     },
-    dataElementType: ArcSlice.id,
-    dataElementOptions: BarController.defaults.dataElementOptions,
   };
 
-  initialize() {
+  initialize(): void {
     super.initialize();
     this.enableOptionSharing = true;
   }
 
-  update(mode: UpdateMode) {
+  update(mode: UpdateMode): void {
     super.update(mode);
     const meta = this._cachedMeta;
     const slices = ((meta.data || []) as unknown) as ArcSlice[];
@@ -73,7 +74,7 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     return layout(nSets, size);
   }
 
-  updateElements(slices: ArcSlice[], start: number, count: number, mode: UpdateMode) {
+  updateElements(slices: ArcSlice[], start: number, count: number, mode: UpdateMode): void {
     const xScale = this._cachedMeta.xScale as { left: number; right: number };
     const yScale = this._cachedMeta.yScale as { top: number; bottom: number };
 
@@ -96,14 +97,12 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     const sharedOptions = this.getSharedOptions(firstOpts) as any;
     const includeOptions = this.includeOptions(mode, sharedOptions);
 
-    for (let i = start; i < start + count; i++) {
+    for (let i = start; i < start + count; i += 1) {
       const slice = slices[i];
-      const properties: IArcSlice & { options?: IArcSliceOptions; refs: (ICircle | IEllipse)[] } = Object.assign(
-        {
-          refs: l.sets,
-        },
-        l.intersections[i]
-      );
+      const properties: IArcSlice & { options?: IArcSliceOptions; refs: (ICircle | IEllipse)[] } = {
+        refs: l.sets,
+        ...l.intersections[i],
+      };
       if (includeOptions) {
         properties.options =
           sharedOptions || ((this.resolveDataElementOptions(i, mode) as unknown) as IArcSliceOptions);
@@ -113,11 +112,11 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
 
-  draw() {
+  draw(): void {
     const meta = this._cachedMeta;
     const elements = meta.data;
 
-    const ctx = this.chart.ctx;
+    const { ctx } = this.chart;
     elements.forEach((elem) => elem.draw(ctx));
 
     ctx.save();
@@ -128,7 +127,7 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     ctx.font = font.string;
     ctx.fillStyle = font.color;
     ctx.textBaseline = 'middle';
-    const labels = this.chart.data.labels! as string[];
+    const labels = this.chart.data.labels as string[];
     l.sets.forEach((set, i) => {
       ctx.textAlign = set.align === 'middle' ? 'center' : set.align;
       ctx.textBaseline = set.verticalAlign;
@@ -137,8 +136,8 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const values = (this.getDataset() as any).data as { value: number }[];
-    l.intersections.forEach((l, i) => {
-      ctx.fillText(values[i].value.toLocaleString(), l.text.x, l.text.y);
+    l.intersections.forEach((intersection, i) => {
+      ctx.fillText(values[i].value.toLocaleString(), intersection.text.x, intersection.text.y);
     });
 
     ctx.restore();
@@ -147,15 +146,16 @@ export class VennDiagramController extends DatasetController<ArcSlice> {
 
 export interface IVennDiagramControllerDatasetOptions
   extends ControllerDatasetOptions,
-    ScriptableAndArrayOptions<IArcSliceOptions, ScriptableContext>,
-    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext> {}
+    ScriptableAndArrayOptions<IArcSliceOptions, ScriptableContext<'venn'>>,
+    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'venn'>> {}
 
 declare module 'chart.js' {
   interface ChartTypeRegistry {
     venn: {
-      chartOptions: CoreChartOptions;
+      chartOptions: CoreChartOptions<'venn'>;
       datasetOptions: IVennDiagramControllerDatasetOptions;
-      defaultDataPoint: number[];
+      defaultDataPoint: number;
+      parsedDataType: { x: number; y: number };
       scales: keyof CartesianScaleTypeRegistry;
     };
   }

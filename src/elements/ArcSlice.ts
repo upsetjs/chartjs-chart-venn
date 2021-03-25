@@ -1,9 +1,9 @@
-import { Element, BarElement, VisualElement, CommonOptions } from 'chart.js';
+import { Element, BarElement, VisualElement, CommonElementOptions } from 'chart.js';
 import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces';
-import { generateArcSlicePath } from '../model/generate';
+import generateArcSlicePath from '../model/generateArcSlicePath';
 import { dist, DEG2RAD } from '../model/math';
 
-export type IArcSliceOptions = CommonOptions;
+export type IArcSliceOptions = CommonElementOptions;
 
 export interface IArcSliceProps extends ITextArcSlice {
   refs: (ICircle | IEllipse)[];
@@ -11,18 +11,17 @@ export interface IArcSliceProps extends ITextArcSlice {
 
 export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implements VisualElement {
   static readonly id = 'arcSlice';
-  static readonly defaults = /* #__PURE__ */ Object.assign({}, BarElement.defaults, {
-    backgroundColor: '#efefef',
-  });
 
-  inRange(mouseX: number, mouseY: number) {
+  static readonly defaults = /* #__PURE__ */ { ...BarElement.defaults, backgroundColor: '#efefef' };
+
+  inRange(mouseX: number, mouseY: number): boolean {
     const props = this.getProps(['arcs', 'refs', 'sets']);
 
     const usedSets = new Set(props.sets);
 
     function checkRef(p: { cx: number; cy: number }, ref: IEllipse | ICircle, inside: boolean) {
       if (isEllipse(ref)) {
-        //(x−a)2 + (y−b)2 = r2
+        // (x−a)2 + (y−b)2 = r2
         const a = ref.rotation * DEG2RAD;
         const x = p.cx - ref.cx;
         const y = p.cy - ref.cy;
@@ -33,7 +32,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
           return false;
         }
       } else {
-        //(x−a)2 + (y−b)2 = r2
+        // (x−a)2 + (y−b)2 = r2
         const d = dist(p, ref);
         if ((inside && d > ref.r) || (!inside && d < ref.r)) {
           return false;
@@ -42,8 +41,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
       return true;
     }
 
-    for (let i = 0; i < props.arcs!.length; i++) {
-      const arc = props.arcs[i];
+    for (const arc of props.arcs ?? []) {
       const ref = props.refs[arc.ref];
       const p = {
         cx: Number.isNaN(mouseX) ? ref.cx : mouseX,
@@ -58,7 +56,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
     }
 
     const remaining = Array.from(usedSets);
-    for (let i = 0; i < remaining.length; i++) {
+    for (let i = 0; i < remaining.length; i += 1) {
       const ref = props.refs[remaining[i]];
       const p = {
         cx: Number.isNaN(mouseX) ? ref.cx : mouseX,
@@ -72,34 +70,35 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
     return true;
   }
 
-  inXRange(mouseX: number) {
+  inXRange(mouseX: number): boolean {
     return this.inRange(mouseX, Number.NaN);
   }
 
-  inYRange(mouseY: number) {
+  inYRange(mouseY: number): boolean {
     return this.inRange(Number.NaN, mouseY);
   }
 
-  getCenterPoint() {
+  getCenterPoint(): { x: number; y: number } {
     const arc = this.getProps(['text']);
     return arc.text;
   }
 
-  tooltipPosition() {
+  tooltipPosition(): { x: number; y: number } {
     return this.getCenterPoint();
   }
 
-  hasValue() {
+  // eslint-disable-next-line class-methods-use-this
+  hasValue(): boolean {
     return true;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D): void {
     ctx.save();
     const options = (this.options as unknown) as IArcSliceOptions;
     const props = this.getProps(['x1', 'y1', 'arcs', 'refs']);
 
     ctx.beginPath();
-    let path: Path2D | undefined = undefined;
+    let path: Path2D | undefined;
     if (window.Path2D && typeof jest === 'undefined') {
       path = new Path2D(generateArcSlicePath(props, props.refs));
     } else {
@@ -139,5 +138,11 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
     }
 
     ctx.restore();
+  }
+}
+
+declare module 'chart.js' {
+  export interface ElementOptionsByType {
+    arcSlice: IArcSliceOptions;
   }
 }

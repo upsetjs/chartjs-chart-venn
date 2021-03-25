@@ -1,11 +1,11 @@
 import { IEllipse, ICircle, isEllipse } from './interfaces';
-import { IArcSliceProps } from '../elements';
+import type { IArcSliceProps } from '../elements';
 
-export function generateArcSlicePath(
+export default function generateArcSlicePath(
   s: Pick<IArcSliceProps, 'x1' | 'y1' | 'arcs' | 'refs'> & { path?: string },
   refs: readonly (ICircle | IEllipse)[],
   p = 0
-) {
+): string {
   if (s.path) {
     return s.path;
   }

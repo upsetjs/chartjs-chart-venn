@@ -1,7 +1,7 @@
 /// <reference types="jest" />
+import { registry } from 'chart.js';
 import { VennDiagramController } from './VennDiagramController';
 import { extractSets } from '../data';
-import { registry } from 'chart.js';
 import { ArcSlice } from '../elements';
 import createChart from '../__tests__/createChart';
 

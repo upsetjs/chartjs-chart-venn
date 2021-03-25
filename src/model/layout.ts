@@ -29,28 +29,23 @@ export default function layout(sets: number, bb: IBoundingBox) {
   const my = (v: number) => y + f * v;
 
   return {
-    sets: r.sets.map((c) =>
-      Object.assign(
-        {},
-        c,
-        {
-          cx: mx(c.cx),
-          cy: my(c.cy),
-          text: {
-            x: mx(c.text.x),
-            y: my(c.text.y),
-          },
-        },
-        isEllipse(c)
-          ? {
-              rx: c.rx * f,
-              ry: c.ry * f,
-            }
-          : {
-              r: c.r * f,
-            }
-      )
-    ),
+    sets: r.sets.map((c) => ({
+      ...c,
+      cx: mx(c.cx),
+      cy: my(c.cy),
+      text: {
+        x: mx(c.text.x),
+        y: my(c.text.y),
+      },
+      ...(isEllipse(c)
+        ? {
+            rx: c.rx * f,
+            ry: c.ry * f,
+          }
+        : {
+            r: c.r * f,
+          }),
+    })),
     intersections: r.intersections.map((c) => ({
       text: {
         x: mx(c.text.x),
@@ -59,12 +54,7 @@ export default function layout(sets: number, bb: IBoundingBox) {
       x1: mx(c.x1),
       y1: my(c.y1),
       sets: c.sets,
-      arcs: c.arcs.map((a) =>
-        Object.assign({}, a, {
-          x2: mx(a.x2),
-          y2: my(a.y2),
-        })
-      ),
+      arcs: c.arcs.map((a) => ({ ...a, x2: mx(a.x2), y2: my(a.y2) })),
     })),
   };
 }

@@ -1,9 +1,9 @@
 import { layout, ICircle, IPoint } from '@upsetjs/venn.js';
-import { IVennDiagramLayout } from './layout';
+import type { IVennDiagramLayout } from './layout';
 import { pointAtCircle } from './math';
-import { ITextCircle, IBoundingBox } from './interfaces';
+import type { ITextCircle, IBoundingBox } from './interfaces';
 
-export function center(circles: readonly ICircle[]) {
+export function center(circles: readonly ICircle[]): { x: number; y: number } {
   const sumX = circles.reduce((acc, a) => acc + a.x, 0);
   const sumY = circles.reduce((acc, a) => acc + a.y, 0);
   return {
@@ -89,12 +89,12 @@ export default function euler(
   return {
     sets: setData,
     intersections: r.map((d) => {
-      const arcs = d.arcs;
+      const { arcs } = d;
       const text = {
         x: d.text.x + bb.x,
         y: d.text.y + bb.y,
       };
-      const subSets = d.data.sets.map((d) => setNames.indexOf(d));
+      const subSets = d.data.sets.map((subSet) => setNames.indexOf(subSet));
       if (arcs.length === 0) {
         return {
           sets: subSets,

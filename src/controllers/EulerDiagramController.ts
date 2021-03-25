@@ -1,13 +1,14 @@
 import { Chart, ChartConfiguration, ChartItem, CartesianScaleTypeRegistry, CoreChartOptions } from 'chart.js';
-import { IVennDiagramLayout } from '../model/layout';
+import type { IVennDiagramLayout } from '../model/layout';
 import { VennDiagramController, IVennDiagramControllerDatasetOptions } from './VennDiagramController';
 import euler from '../model/euler';
-import { IBoundingBox } from '../model/interfaces';
+import type { IBoundingBox } from '../model/interfaces';
 import patchController from './patchController';
 import { ArcSlice } from '../elements';
 
 export class EulerDiagramController extends VennDiagramController {
   static readonly id = 'euler';
+
   static readonly defaults = VennDiagramController.defaults;
 
   protected computeLayout(size: IBoundingBox): IVennDiagramLayout {
@@ -21,9 +22,10 @@ export type IEulerDiagramControllerDatasetOptions = IVennDiagramControllerDatase
 declare module 'chart.js' {
   interface ChartTypeRegistry {
     euler: {
-      chartOptions: CoreChartOptions;
+      chartOptions: CoreChartOptions<'euler'>;
       datasetOptions: IEulerDiagramControllerDatasetOptions;
-      defaultDataPoint: number[];
+      defaultDataPoint: number;
+      parsedDataType: { x: number; y: number };
       scales: keyof CartesianScaleTypeRegistry;
     };
   }
