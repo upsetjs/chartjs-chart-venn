@@ -19,7 +19,7 @@ interface ILayout {
   bb: IBoundingBox;
 }
 
-export default function layout(sets: number, bb: IBoundingBox) {
+export default function layout(sets: number, bb: IBoundingBox): IVennDiagramLayout {
   const lookup = [venn0, venn1, venn2, venn3, venn4, venn5];
   const r = lookup[Math.min(lookup.length - 1, sets)] as ILayout;
   const f = Math.min(bb.width / r.bb.width, bb.height / r.bb.height);

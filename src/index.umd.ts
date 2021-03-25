@@ -1,5 +1,5 @@
-import { VennDiagramController, EulerDiagramController } from './controllers';
 import { registry } from 'chart.js';
+import { VennDiagramController, EulerDiagramController } from './controllers';
 import { ArcSlice } from './elements';
 
 export * from '.';
