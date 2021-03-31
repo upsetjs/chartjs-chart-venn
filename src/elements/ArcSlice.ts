@@ -12,7 +12,9 @@ export interface IArcSliceProps extends ITextArcSlice {
 export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implements VisualElement {
   static readonly id = 'arcSlice';
 
-  static readonly defaults = /* #__PURE__ */ { ...BarElement.defaults, backgroundColor: '#efefef' };
+  static readonly defaults = /* #__PURE__ */ BarElement.defaults;
+
+  static readonly defaultRoutes = /* #__PURE__ */ BarElement.defaultRoutes;
 
   inRange(mouseX: number, mouseY: number): boolean {
     const props = this.getProps(['arcs', 'refs', 'sets']);

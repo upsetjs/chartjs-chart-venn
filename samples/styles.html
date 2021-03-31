@@ -25,12 +25,38 @@
         const ctx = document.getElementById('canvas').getContext('2d');
         window.myBar = new Chart(ctx, {
           type: 'venn',
-          data: data,
+          data: {
+            labels: data.labels,
+            datasets: [{
+              ...data.datasets[0],
+              backgroundColor: 'blue',
+              borderColor: 'red',
+              borderWidth: 10,
+            }]
+          },
           options: {
+            layout: {
+              padding: 10,
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
             title: {
               display: true,
               text: 'Chart.js Venn Diagram Chart',
             },
+            scales: {
+              x: {
+                ticks: {
+                  color: 'white',
+                  font: {
+                    size: 20,
+                  }
+                }
+              }
+            }
           },
         });
       };

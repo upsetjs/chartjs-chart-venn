@@ -8,8 +8,6 @@ import {
   ControllerDatasetOptions,
   CommonHoverOptions,
   ChartConfiguration,
-  CartesianScaleTypeRegistry,
-  CoreChartOptions,
   LinearScale,
   ScriptableContext,
 } from 'chart.js';
