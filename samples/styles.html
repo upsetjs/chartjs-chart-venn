@@ -27,12 +27,14 @@
           type: 'venn',
           data: {
             labels: data.labels,
-            datasets: [{
-              ...data.datasets[0],
-              backgroundColor: 'blue',
-              borderColor: 'red',
-              borderWidth: 10,
-            }]
+            datasets: [
+              {
+                ...data.datasets[0],
+                backgroundColor: 'blue',
+                borderColor: 'red',
+                borderWidth: 10,
+              },
+            ],
           },
           options: {
             layout: {
@@ -53,10 +55,10 @@
                   color: 'white',
                   font: {
                     size: 20,
-                  }
-                }
-              }
-            }
+                  },
+                },
+              },
+            },
           },
         });
       };
