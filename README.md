@@ -13,7 +13,7 @@ Chart.js module for charting venn diagrams with up to five sets. Adding new char
 ## Install
 
 ```bash
-npm install --save chart.js@next chartjs-chart-venn
+npm install --save chart.js chartjs-chart-venn
 ```
 
 ## Usage
