@@ -63,7 +63,7 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   update(mode: UpdateMode): void {
     super.update(mode);
     const meta = this._cachedMeta;
-    const slices = ((meta.data || []) as unknown) as ArcSlice[];
+    const slices = (meta.data || []) as unknown as ArcSlice[];
     this.updateElements(slices, 0, slices.length, mode);
   }
 
@@ -102,8 +102,7 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
         ...l.intersections[i],
       };
       if (includeOptions) {
-        properties.options =
-          sharedOptions || ((this.resolveDataElementOptions(i, mode) as unknown) as IArcSliceOptions);
+        properties.options = sharedOptions || (this.resolveDataElementOptions(i, mode) as unknown as IArcSliceOptions);
       }
       this.updateElement(slice, i, properties as any, mode);
     }

@@ -98,7 +98,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.save();
-    const options = (this.options as unknown) as IArcSliceOptions;
+    const options = this.options as unknown as IArcSliceOptions;
     const props = this.getProps(['x1', 'y1', 'arcs', 'refs']);
 
     ctx.beginPath();
