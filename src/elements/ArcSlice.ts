@@ -146,7 +146,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
 }
 
 declare module 'chart.js' {
-  export interface ElementOptionsByType {
-    arcSlice: IArcSliceOptions;
+  export interface ElementOptionsByType<TType extends ChartType> {
+    arcSlice: ScriptableAndArrayOptions<IArcSliceOptions & CommonHoverOptions, ScriptableContext<TType>>;
   }
 }

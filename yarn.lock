@@ -1039,6 +1039,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-selection@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@types/d3-selection@npm:2.0.0"
+  checksum: b4165592bd9563d81e1ddbbf988a6196addf43065c9f90c1d6384aad9555fdd575477c402a1973d610a8feda7b5218223e452a113f1a8c65670613e2929dcde0
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.38.0":
   version: 1.39.4
   resolution: "@types/emscripten@npm:1.39.4"
@@ -2440,6 +2447,7 @@ __metadata:
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rollup/plugin-replace": ^2.4.2
     "@rollup/plugin-typescript": ^8.2.1
+    "@types/d3-selection": ^2.0.0
     "@types/jest": ^26.0.23
     "@types/jest-image-snapshot": ^4.3.0
     "@types/node": ^15.0.2
