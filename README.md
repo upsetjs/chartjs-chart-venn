@@ -4,11 +4,20 @@
 
 Chart.js module for charting venn diagrams with up to five sets. Adding new chart type: `venn` and `euler`.
 
-**Works only with Chart.js >= 3.0.0-beta**
-
 ![Sports Venn Diagram](https://user-images.githubusercontent.com/4129778/84571515-f32f9100-ad93-11ea-9354-039411eef43a.png)
 
 ![five sets](https://user-images.githubusercontent.com/4129778/86374498-eca28400-bc84-11ea-8494-ea7d9cd11781.png)
+
+## Related Plugins
+
+Check out also my other chart.js plugins:
+ * [chartjs-chart-boxplot](https://github.com/sgratzl/chartjs-chart-boxplot) for rendering boxplots and violin plots
+ * [chartjs-chart-error-bars](https://github.com/sgratzl/chartjs-chart-error-bars) for rendering errors bars to bars and line charts
+ * [chartjs-chart-geo](https://github.com/sgratzl/chartjs-chart-geo) for rendering map, bubble maps, and choropleth charts
+ * [chartjs-chart-graph](https://github.com/sgratzl/chartjs-chart-graph) for rendering graphs, trees, and networks
+ * [chartjs-chart-pcp](https://github.com/sgratzl/chartjs-chart-pcp) for rendering parallel coordinate plots
+ * [chartjs-chart-wordcloud](https://github.com/sgratzl/chartjs-chart-wordcloud) for rendering word clouds
+ * [chartjs-plugin-hierarchical](https://github.com/sgratzl/chartjs-plugin-hierarchical) for rendering hierarchical categorical axes which can be expanded and collapsed
 
 ## Install
 
