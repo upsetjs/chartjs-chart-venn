@@ -1,7 +1,7 @@
 {
   "name": "chartjs-chart-venn",
   "description": "Chart.js module for venn diagrams",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "author": {
     "name": "Samuel Gratzl",
     "email": "sam@sgratzl.com",
