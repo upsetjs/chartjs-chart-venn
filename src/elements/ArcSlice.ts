@@ -3,7 +3,7 @@ import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces
 import generateArcSlicePath from '../model/generateArcSlicePath';
 import { dist, DEG2RAD } from '../model/math';
 
-export type IArcSliceOptions = CommonElementOptions;
+export interface IArcSliceOptions extends CommonElementOptions, Record<string, unknown> {}
 
 export interface IArcSliceProps extends ITextArcSlice {
   refs: (ICircle | IEllipse)[];

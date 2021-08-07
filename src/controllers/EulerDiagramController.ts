@@ -25,6 +25,7 @@ declare module 'chart.js' {
       chartOptions: CoreChartOptions<'euler'>;
       datasetOptions: IEulerDiagramControllerDatasetOptions;
       defaultDataPoint: number;
+      metaExtensions: Record<string, never>;
       parsedDataType: { x: number; y: number };
       scales: keyof CartesianScaleTypeRegistry;
     };

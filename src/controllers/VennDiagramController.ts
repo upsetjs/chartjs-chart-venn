@@ -152,6 +152,7 @@ declare module 'chart.js' {
       chartOptions: CoreChartOptions<'venn'>;
       datasetOptions: IVennDiagramControllerDatasetOptions;
       defaultDataPoint: number;
+      metaExtensions: Record<string, never>;
       parsedDataType: { x: number; y: number };
       scales: keyof CartesianScaleTypeRegistry;
     };
