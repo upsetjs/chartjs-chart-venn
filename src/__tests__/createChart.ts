@@ -38,7 +38,7 @@ export default function createChart<
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-  defaults.font.family = 'Courier New';
+  Object.assign(defaults.font, { family: 'Courier New' });
   defaults.color = 'transparent';
   defaults.borderColor = 'transparent';
   // eslint-disable-next-line no-param-reassign
