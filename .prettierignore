@@ -13,3 +13,4 @@
 *.png
 *.tsbuildinfo
 *.tgz
+/samples/type_test.js
