@@ -128,10 +128,10 @@ The ESM build of the library supports tree shaking thus having no side effects. 
 Variant A:
 
 ```js
-import { Chart } from 'chart.js';
+import { Chart, LinearScale } from 'chart.js';
 import { VennDiagramController, ArcSlice } from 'chartjs-chart-venn';
 
-Chart.register(VennDiagramController, ArcSlice);
+Chart.register(VennDiagramController, ArcSlice, LinearScale);
 ...
 
 new Chart(ctx, {
