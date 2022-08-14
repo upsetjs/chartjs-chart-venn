@@ -10,6 +10,7 @@ import {
   ChartConfiguration,
   LinearScale,
   ScriptableContext,
+  Scale,
 } from 'chart.js';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
@@ -73,8 +74,8 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   }
 
   updateElements(slices: ArcSlice[], start: number, count: number, mode: UpdateMode): void {
-    const xScale = this._cachedMeta.xScale as { left: number; right: number };
-    const yScale = this._cachedMeta.yScale as { top: number; bottom: number };
+    const xScale = this._cachedMeta.xScale as Scale & { left: number; right: number };
+    const yScale = this._cachedMeta.yScale as Scale & { top: number; bottom: number };
 
     const w = xScale.right - xScale.left;
     const h = yScale.bottom - yScale.top;
@@ -86,9 +87,13 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
       height: h,
     });
     (this._cachedMeta as any)._layout = l;
-    (this._cachedMeta as any)._layoutFont = {
+    (this._cachedMeta as any)._setLayoutFont = {
       ...(xScale as any)._resolveTickFontOptions(0),
       color: (xScale as any).options.ticks.color,
+    };
+    (this._cachedMeta as any)._labelLayoutFont = {
+      ...(yScale as any)._resolveTickFontOptions(0),
+      color: (yScale as any).options.ticks.color,
     };
 
     const firstOpts = this.resolveDataElementOptions(start, mode);
@@ -116,26 +121,46 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
     const { ctx } = this.chart;
     elements.forEach((elem) => elem.draw(ctx));
 
+    this.drawLabels(ctx);
+  }
+
+  private drawLabels(ctx: CanvasRenderingContext2D): void {
+    const meta = this._cachedMeta;
+
     ctx.save();
 
     const l = (meta as any)._layout as IVennDiagramLayout;
-    const font = (meta as any)._layoutFont;
-    ctx.textBaseline = 'middle';
-    ctx.font = font.string;
-    ctx.fillStyle = font.color;
-    ctx.textBaseline = 'middle';
-    const labels = this.chart.data.labels as string[];
-    l.sets.forEach((set, i) => {
-      ctx.textAlign = set.align === 'middle' ? 'center' : set.align;
-      ctx.textBaseline = set.verticalAlign;
-      ctx.fillText(labels[i], set.text.x, set.text.y);
-    });
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const values = (this.getDataset() as any).data as { value: number }[];
-    l.intersections.forEach((intersection, i) => {
-      ctx.fillText(values[i].value.toLocaleString(), intersection.text.x, intersection.text.y);
-    });
+    const setLayoutScale = meta.xScale as LinearScale;
+    const setLayoutFont = (meta as any)._setLayoutFont;
+    const labelLayoutScale = meta.yScale as LinearScale;
+    const labelLayoutFont = (meta as any)._labelLayoutFont;
+
+    if (labelLayoutScale?.options.ticks.display) {
+      // set labels
+      ctx.font = labelLayoutFont.string;
+      ctx.fillStyle = labelLayoutFont.color;
+      ctx.textBaseline = 'middle';
+
+      const labels = this.chart.data.labels as string[];
+      l.sets.forEach((set, i) => {
+        ctx.textAlign = set.align === 'middle' ? 'center' : set.align;
+        ctx.textBaseline = set.verticalAlign;
+        ctx.fillText(labels[i], set.text.x, set.text.y);
+      });
+    }
+
+    if (setLayoutScale?.options.ticks.display) {
+      ctx.font = setLayoutFont.string;
+      ctx.fillStyle = setLayoutFont.color;
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      const values = (this.getDataset() as any).data as { value: number }[];
+      l.intersections.forEach((intersection, i) => {
+        ctx.fillText(values[i].value.toLocaleString(), intersection.text.x, intersection.text.y);
+      });
+    }
 
     ctx.restore();
   }
