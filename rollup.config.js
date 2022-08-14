@@ -5,6 +5,7 @@ import dts from 'rollup-plugin-dts';
 import typescript from '@rollup/plugin-typescript';
 import { terser } from '@chiogen/rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
+import json from '@rollup/plugin-json';
 
 import fs from 'fs';
 
@@ -54,6 +55,7 @@ export default (options) => {
     input: './src/index.ts',
     external: (v) => isDependency(v) || isPeerDependency(v),
     plugins: [
+      json(),
       typescript(),
       resolve({
         mainFields: ['module', 'main'],
