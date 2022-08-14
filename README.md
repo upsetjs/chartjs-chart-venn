@@ -91,6 +91,13 @@ const config = {
 
 `ArcSlice` elements have the basic `backgroundColor`, `borderColor`, and `borderWidth` properties similar to a regular rectangle.
 
+### Styling of labels
+
+The `x` scale _ticks_ options are used to configure the _set value_ labels within the intersections.
+The `y` scale _ticks_ options are used to configure the _set label_ labels next ot the set circles.
+Changing the tick display options (e.g. `scales.x.ticks.display = false`) will disable the set value labels.
+Similarly, its font spec and color are used to the styling of the labels.
+
 ## Euler Diagram
 
 Euler diagrams are relaxed proportional venn diagrams such that the area of the circles and overlap try to fit the overlapping value.
