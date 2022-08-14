@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Venn Diagram Chart</title>
+    <script src="https://unpkg.com/chart.js@3.9.1/dist/chart.js"></script>
+    <script src="../build/index.umd.js"></script>
+  </head>
+
+  <body>
+    <div id="container" style="width: 75%">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      const data = ChartVenn.extractSets(
+        [
+          { label: 'Soccer', values: ['alex', 'casey', 'drew', 'hunter'] },
+          { label: 'Tennis', values: ['casey', 'drew', 'jade'] },
+          { label: 'Volleyball', values: ['drew', 'glen', 'jade'] },
+        ],
+        {
+          label: 'Sports',
+        }
+      );
+      window.onload = () => {
+        const ctx = document.getElementById('canvas').getContext('2d');
+        window.myBar = new Chart(ctx, {
+          type: 'venn',
+          data: data,
+          options: {
+            title: {
+              display: true,
+              text: 'Chart.js Venn Diagram Chart',
+            },
+            scales: {
+              x: {
+                ticks: {
+                  font: {
+                    font: 'Arial',
+                    size: 18,
+                  },
+                  color: 'green',
+                },
+              },
+              y: {
+                ticks: {
+                  font: {
+                    font: 'Arial',
+                    size: 20,
+                  },
+                  color: 'red',
+                },
+              },
+            },
+          },
+        });
+      };
+    </script>
+  </body>
+</html>
