@@ -93,8 +93,8 @@ const config = {
 
 ### Styling of labels
 
-The `x` scale *ticks* options are used to configure the *set value* labels within the intersections.
-The `y` scale *ticks* options are used to configure the *set label* labels next ot the set circles.
+The `x` scale _ticks_ options are used to configure the _set value_ labels within the intersections.
+The `y` scale _ticks_ options are used to configure the _set label_ labels next ot the set circles.
 Changing the tick display options (e.g. `scales.x.ticks.display = false`) will disable the set value labels.
 Similarly, its font spec and color are used to the styling of the labels.
 
