@@ -14,7 +14,7 @@ const pkg = JSON.parse(fs.readFileSync('./package.json'));
 function resolveYear() {
   // Extract copyrights from the LICENSE.
   const license = fs.readFileSync('./LICENSE', 'utf-8').toString();
-  const matches = Array.from(license.matchAll(/\(c\) (\d+)/gm));
+  const matches = Array.from(license.matchAll(/\(c\) (\d+-\d+)/gm));
   if (!matches || matches.length === 0) {
     return 2021;
   }
@@ -35,10 +35,10 @@ const banner = `/**
  */
 const watchOnly = ['umd'];
 
-const isDependency = (v) => Object.keys(pkg.dependencies || {}).some((e) => e === v || v.startsWith(e + '/'));
-const isPeerDependency = (v) => Object.keys(pkg.peerDependencies || {}).some((e) => e === v || v.startsWith(e + '/'));
+const isDependency = (v) => Object.keys(pkg.dependencies || {}).some((e) => e === v || v.startsWith(`${e}/`));
+const isPeerDependency = (v) => Object.keys(pkg.peerDependencies || {}).some((e) => e === v || v.startsWith(`${e}/`));
 
-export default (options) => {
+export default function Config(options) {
   const buildFormat = (format) => {
     return !options.watch || watchOnly.includes(format);
   };
@@ -91,9 +91,10 @@ export default (options) => {
       ...base,
       output: {
         ...commonOutput,
-        file: pkg.main,
+        file: pkg.require,
         format: 'cjs',
       },
+      external: (v) => (isDependency(v) || isPeerDependency(v)) && ['d3-'].every((di) => !v.includes(di)),
     },
     (buildFormat('umd') || buildFormat('umd-min')) && {
       ...base,
@@ -101,7 +102,7 @@ export default (options) => {
       output: [
         buildFormat('umd') && {
           ...commonOutput,
-          file: pkg.unpkg.replace('.min', ''),
+          file: pkg.umd,
           format: 'umd',
           name: pkg.global,
         },
@@ -125,8 +126,12 @@ export default (options) => {
       plugins: [
         dts({
           respectExternal: true,
+          compilerOptions: {
+            skipLibCheck: true,
+            skipDefaultLibCheck: true,
+          },
         }),
       ],
     },
   ].filter(Boolean);
-};
+}
