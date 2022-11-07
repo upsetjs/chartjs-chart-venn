@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: fail on fork
-        if: github.repository_owner != 'sgratzl'
+        if: github.repository_owner != 'upsetjs'
         run: exit 1
 
   create_release:
