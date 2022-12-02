@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { registry } from 'chart.js';
+import { LinearScale, registry } from 'chart.js';
 import { EulerDiagramController } from './EulerDiagramController';
 import { extractSets } from '../data';
 import { ArcSlice } from '../elements';
@@ -9,6 +9,7 @@ describe('Euler', () => {
   beforeAll(() => {
     registry.addControllers(EulerDiagramController);
     registry.addElements(ArcSlice);
+    registry.addScales(LinearScale);
   });
   test('default', () => {
     const data = extractSets(
