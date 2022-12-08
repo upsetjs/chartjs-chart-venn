@@ -28,5 +28,6 @@
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
-  }
+  },
+  "liveServer.settings.port": 5501
 }

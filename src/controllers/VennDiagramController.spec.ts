@@ -14,9 +14,9 @@ describe('venn', () => {
   test('default', () => {
     const data = extractSets(
       [
-        { label: '', values: ['alex', 'casey', 'drew', 'hunter'] },
-        { label: '', values: ['casey', 'drew', 'jade'] },
-        { label: '', values: ['drew', 'glen', 'jade'] },
+        { label: ' ', values: ['alex', 'casey', 'drew', 'hunter'] },
+        { label: '  ', values: ['casey', 'drew', 'jade'] },
+        { label: '   ', values: ['drew', 'glen', 'jade'] },
       ],
       {
         label: 'Sports',
@@ -27,7 +27,6 @@ describe('venn', () => {
       {
         type: VennDiagramController.id as 'venn',
         data,
-        options: {},
       },
       1000,
       500

@@ -51,6 +51,9 @@ export default function createChart<
       legend: {
         display: false,
       },
+      colors: {
+        enabled: false,
+      },
       title: {
         display: false,
       },
@@ -60,6 +63,8 @@ export default function createChart<
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const ctx = canvas.getContext('2d')!;
 
+  // remove Path2D since not properly working
+  (window as any).Path2D = null;
   const t = new Chart<TYPE, DATA, LABEL>(ctx, config);
 
   return {

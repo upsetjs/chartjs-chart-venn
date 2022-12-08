@@ -112,7 +112,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
 
     ctx.beginPath();
     let path: Path2D | undefined;
-    if (window.Path2D && typeof jest === 'undefined') {
+    if (window.Path2D) {
       path = new Path2D(generateArcSlicePath(props, props.refs));
     } else {
       // try old school
