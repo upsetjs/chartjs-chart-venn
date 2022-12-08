@@ -1,4 +1,13 @@
-import { Element, BarElement, VisualElement, CommonElementOptions } from 'chart.js';
+import {
+  Element,
+  BarElement,
+  VisualElement,
+  CommonElementOptions,
+  ScriptableAndArrayOptions,
+  ChartType,
+  CommonHoverOptions,
+  ScriptableContext,
+} from 'chart.js';
 import { ITextArcSlice, ICircle, IEllipse, isEllipse } from '../model/interfaces';
 import generateArcSlicePath from '../model/generateArcSlicePath';
 import { dist, DEG2RAD } from '../model/math';
@@ -103,7 +112,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
 
     ctx.beginPath();
     let path: Path2D | undefined;
-    if (window.Path2D && typeof jest === 'undefined') {
+    if (window.Path2D) {
       path = new Path2D(generateArcSlicePath(props, props.refs));
     } else {
       // try old school
