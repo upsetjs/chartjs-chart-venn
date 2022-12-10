@@ -11,6 +11,8 @@ import {
   LinearScale,
   ScriptableContext,
   Scale,
+  CoreChartOptions,
+  CartesianScaleTypeRegistry,
 } from 'chart.js';
 import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';

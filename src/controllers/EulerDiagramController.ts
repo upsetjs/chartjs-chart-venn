@@ -1,4 +1,4 @@
-import { Chart, ChartConfiguration, ChartItem } from 'chart.js';
+import { CartesianScaleTypeRegistry, Chart, ChartConfiguration, ChartItem, CoreChartOptions } from 'chart.js';
 import type { IVennDiagramLayout } from '../model/layout';
 import { VennDiagramController, IVennDiagramControllerDatasetOptions } from './VennDiagramController';
 import euler from '../model/euler';
