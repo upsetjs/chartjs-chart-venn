@@ -1,9 +1,9 @@
-import venn0 from './data/venn0.json';
-import venn1 from './data/venn1.json';
-import venn2 from './data/venn2.json';
-import venn3 from './data/venn3.json';
-import venn4 from './data/venn4.json';
-import venn5 from './data/venn5.json';
+import venn0 from './data/venn0.json' assert { type: 'json' };
+import venn1 from './data/venn1.json' assert { type: 'json' };
+import venn2 from './data/venn2.json' assert { type: 'json' };
+import venn3 from './data/venn3.json' assert { type: 'json' };
+import venn4 from './data/venn4.json' assert { type: 'json' };
+import venn5 from './data/venn5.json' assert { type: 'json' };
 import { ITextEllipse, ITextArcSlice, ITextCircle, isEllipse, IBoundingBox } from './interfaces';
 
 // could be slice of three
