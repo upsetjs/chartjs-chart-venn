@@ -58,7 +58,7 @@ export default function Config(options) {
       json(),
       typescript(),
       resolve({
-        mainFields: ['module', 'main'],
+        mainFields: ['module', 'jsnext:main', 'main'],
         extensions: ['.mjs', '.cjs', '.js', '.jsx', '.json', '.node'],
         modulesOnly: true,
       }),
