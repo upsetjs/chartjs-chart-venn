@@ -28,7 +28,7 @@ npm install --save chart.js chartjs-chart-venn
 
 ## Usage
 
-see [Samples](https://github.com/upsetjs/chartjs-chart-venn/tree/main/samples) on Github
+see [Examples](https://upset.js.org/chartjs-chart-venn/examples/)
 
 or at this [![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/ExPyZjG)
 
