@@ -18,14 +18,24 @@ import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
 import type { IArcSlice, IBoundingBox, ICircle, IEllipse } from '../model/interfaces';
 import patchController from './patchController';
+import { ISet } from 'src/data';
 
 export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
+  /**
+   * @internal
+   */
   static readonly id: string = 'venn';
 
+  /**
+   * @internal
+   */
   static readonly defaults = {
     dataElementType: ArcSlice.id,
   };
 
+  /**
+   * @internal
+   */
   static readonly overrides: any = {
     plugins: {
       tooltip: {
@@ -58,11 +68,17 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
     },
   };
 
+  /**
+   * @internal
+   */
   initialize(): void {
     super.initialize();
     this.enableOptionSharing = true;
   }
 
+  /**
+   * @internal
+   */
   update(mode: UpdateMode): void {
     super.update(mode);
     const meta = this._cachedMeta;
@@ -75,6 +91,9 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
     return layout(nSets, size);
   }
 
+  /**
+   * @internal
+   */
   updateElements(slices: ArcSlice[], start: number, count: number, mode: UpdateMode): void {
     const xScale = this._cachedMeta.xScale as Scale & { left: number; right: number };
     const yScale = this._cachedMeta.yScale as Scale & { top: number; bottom: number };
@@ -116,6 +135,9 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
   }
 
+  /**
+   * @internal
+   */
   draw(): void {
     const meta = this._cachedMeta;
     const elements = meta.data;
@@ -178,7 +200,7 @@ declare module 'chart.js' {
     venn: {
       chartOptions: CoreChartOptions<'venn'>;
       datasetOptions: IVennDiagramControllerDatasetOptions;
-      defaultDataPoint: number;
+      defaultDataPoint: number | ISet<number>;
       metaExtensions: Record<string, never>;
       parsedDataType: { x: number; y: number };
       scales: keyof CartesianScaleTypeRegistry;

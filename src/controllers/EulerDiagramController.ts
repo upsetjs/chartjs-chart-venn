@@ -5,10 +5,17 @@ import euler from '../model/euler';
 import type { IBoundingBox } from '../model/interfaces';
 import patchController from './patchController';
 import { ArcSlice } from '../elements';
+import { ISet } from 'src/data';
 
 export class EulerDiagramController extends VennDiagramController {
+  /**
+   * @internal
+   */
   static readonly id = 'euler';
 
+  /**
+   * @internal
+   */
   static readonly defaults = VennDiagramController.defaults;
 
   protected computeLayout(size: IBoundingBox): IVennDiagramLayout {
@@ -24,7 +31,7 @@ declare module 'chart.js' {
     euler: {
       chartOptions: CoreChartOptions<'euler'>;
       datasetOptions: IEulerDiagramControllerDatasetOptions;
-      defaultDataPoint: number;
+      defaultDataPoint: number | ISet<number>;
       metaExtensions: Record<string, never>;
       parsedDataType: { x: number; y: number };
       scales: keyof CartesianScaleTypeRegistry;

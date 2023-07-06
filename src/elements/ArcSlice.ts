@@ -19,14 +19,26 @@ export interface IArcSliceProps extends ITextArcSlice {
 }
 
 export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implements VisualElement {
+  /**
+   * @internal
+   */
   static readonly id = 'arcSlice';
 
+  /**
+   * @internal
+   */
   static readonly defaults = /* #__PURE__ */ { ...BarElement.defaults, backgroundColor: '#efefef' };
 
+  /**
+   * @internal
+   */
   static readonly defaultRoutes = /* #__PURE__ */ {
     borderColor: 'borderColor',
   };
 
+  /**
+   * @internal
+   */
   inRange(mouseX: number, mouseY: number): boolean {
     const props = this.getProps(['arcs', 'refs', 'sets']);
 
@@ -83,28 +95,46 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
     return true;
   }
 
+  /**
+   * @internal
+   */
   inXRange(mouseX: number): boolean {
     return this.inRange(mouseX, Number.NaN);
   }
 
+  /**
+   * @internal
+   */
   inYRange(mouseY: number): boolean {
     return this.inRange(Number.NaN, mouseY);
   }
 
+  /**
+   * @internal
+   */
   getCenterPoint(): { x: number; y: number } {
     const arc = this.getProps(['text']);
     return arc.text;
   }
 
+  /**
+   * @internal
+   */
   tooltipPosition(): { x: number; y: number } {
     return this.getCenterPoint();
   }
 
+  /**
+   * @internal
+   */
   // eslint-disable-next-line class-methods-use-this
   hasValue(): boolean {
     return true;
   }
 
+  /**
+   * @internal
+   */
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.save();
     const options = this.options as unknown as IArcSliceOptions;
