@@ -24,6 +24,4 @@ and [CodePen](https://codepen.io/sgratzl/pen/ExPyZjG)
 
 ### Data Structure
 
-
 ### Styling
-

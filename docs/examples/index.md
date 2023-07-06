@@ -26,7 +26,6 @@ import {config as euler} from './euler';
 
 :::
 
-
 ## Euler Diagram
 
 <EulerDiagramChart
