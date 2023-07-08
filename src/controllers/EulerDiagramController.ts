@@ -8,9 +8,6 @@ import { ArcSlice } from '../elements';
 import { ISet } from 'src/data';
 
 export class EulerDiagramController extends VennDiagramController {
-  /**
-   * @internal
-   */
   static readonly id = 'euler';
 
   /**
