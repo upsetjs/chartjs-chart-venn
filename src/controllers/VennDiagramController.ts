@@ -21,9 +21,6 @@ import patchController from './patchController';
 import { ISet } from 'src/data';
 
 export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
-  /**
-   * @internal
-   */
   static readonly id: string = 'venn';
 
   /**

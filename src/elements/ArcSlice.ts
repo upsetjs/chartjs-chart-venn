@@ -19,9 +19,6 @@ export interface IArcSliceProps extends ITextArcSlice {
 }
 
 export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implements VisualElement {
-  /**
-   * @internal
-   */
   static readonly id = 'arcSlice';
 
   /**
