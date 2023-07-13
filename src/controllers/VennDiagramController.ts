@@ -24,14 +24,14 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   static readonly id: string = 'venn';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults = {
     dataElementType: ArcSlice.id,
   };
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly overrides: any = {
     plugins: {
@@ -66,7 +66,7 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   };
 
   /**
-   * @internal
+   * @hidden
    */
   initialize(): void {
     super.initialize();
@@ -74,7 +74,7 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   }
 
   /**
-   * @internal
+   * @hidden
    */
   update(mode: UpdateMode): void {
     super.update(mode);
@@ -89,7 +89,7 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   }
 
   /**
-   * @internal
+   * @hidden
    */
   updateElements(slices: ArcSlice[], start: number, count: number, mode: UpdateMode): void {
     const xScale = this._cachedMeta.xScale as Scale & { left: number; right: number };
@@ -133,7 +133,7 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   }
 
   /**
-   * @internal
+   * @hidden
    */
   draw(): void {
     const meta = this._cachedMeta;

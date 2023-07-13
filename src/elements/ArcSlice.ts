@@ -22,19 +22,19 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
   static readonly id = 'arcSlice';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults = /* #__PURE__ */ { ...BarElement.defaults, backgroundColor: '#efefef' };
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaultRoutes = /* #__PURE__ */ {
     borderColor: 'borderColor',
   };
 
   /**
-   * @internal
+   * @hidden
    */
   inRange(mouseX: number, mouseY: number): boolean {
     const props = this.getProps(['arcs', 'refs', 'sets']);
@@ -93,21 +93,21 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
   }
 
   /**
-   * @internal
+   * @hidden
    */
   inXRange(mouseX: number): boolean {
     return this.inRange(mouseX, Number.NaN);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   inYRange(mouseY: number): boolean {
     return this.inRange(Number.NaN, mouseY);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getCenterPoint(): { x: number; y: number } {
     const arc = this.getProps(['text']);
@@ -115,14 +115,14 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
   }
 
   /**
-   * @internal
+   * @hidden
    */
   tooltipPosition(): { x: number; y: number } {
     return this.getCenterPoint();
   }
 
   /**
-   * @internal
+   * @hidden
    */
   // eslint-disable-next-line class-methods-use-this
   hasValue(): boolean {
@@ -130,7 +130,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
   }
 
   /**
-   * @internal
+   * @hidden
    */
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.save();

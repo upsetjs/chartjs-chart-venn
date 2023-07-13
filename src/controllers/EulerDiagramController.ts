@@ -11,7 +11,7 @@ export class EulerDiagramController extends VennDiagramController {
   static readonly id = 'euler';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults = VennDiagramController.defaults;
 
