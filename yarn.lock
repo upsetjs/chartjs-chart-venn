@@ -1071,6 +1071,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-selection@npm:^3.0.10":
+  version: 3.0.10
+  resolution: "@types/d3-selection@npm:3.0.10"
+  checksum: 10c0/de1f99ab186a08999bf394a645fd76911add1b02316270d4c07616c8383903a2b068d7e02b73b6a99a1f26bb49a2e99ef4b55a5d2ddfa165f6f3c53144897920
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.39.6":
   version: 1.39.13
   resolution: "@types/emscripten@npm:1.39.13"
@@ -2353,6 +2360,7 @@ __metadata:
     "@rollup/plugin-node-resolve": "npm:^15.3.0"
     "@rollup/plugin-replace": "npm:^6.0.1"
     "@rollup/plugin-typescript": "npm:^12.1.0"
+    "@types/d3-selection": "npm:^3.0.10"
     "@types/jest-image-snapshot": "npm:^6.4.0"
     "@types/node": "npm:^22.7.4"
     "@upsetjs/venn.js": "npm:^1.4.2"
@@ -2360,6 +2368,7 @@ __metadata:
     canvas: "npm:^2.11.2"
     canvas-5-polyfill: "npm:^0.1.5"
     chart.js: "npm:^4.4.4"
+    d3-selection: "npm:^3.0.0"
     eslint: "npm:^9.11.1"
     eslint-plugin-prettier: "npm:^5.2.1"
     jest-image-snapshot: "npm:^6.4.0"

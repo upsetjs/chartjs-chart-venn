@@ -124,7 +124,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
   /**
    * @hidden
    */
-  // eslint-disable-next-line class-methods-use-this
+
   hasValue(): boolean {
     return true;
   }
