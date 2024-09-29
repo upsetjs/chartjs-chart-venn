@@ -1,6 +1,6 @@
-/// <reference types="jest" />
 /// <reference types="node" />
 
+import { expect } from 'vitest';
 import { Chart, ChartConfiguration, defaults, ChartType, DefaultDataPoint } from 'chart.js';
 import { toMatchImageSnapshot, MatchImageSnapshotOptions } from 'jest-image-snapshot';
 import 'canvas-5-polyfill';
@@ -12,7 +12,7 @@ function toBuffer(canvas: HTMLCanvasElement) {
     canvas.toBlob((b) => {
       const file = new FileReader();
       file.onload = () => resolve(Buffer.from(file.result as ArrayBuffer));
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       file.readAsArrayBuffer(b!);
     });
   });
@@ -34,14 +34,13 @@ export default function createChart<
   TYPE extends ChartType,
   DATA extends unknown[] = DefaultDataPoint<TYPE>,
   LABEL = string,
->(config: ChartConfiguration<TYPE, DATA, LABEL>, width = 300, height = 300): ChartHelper<TYPE, DATA, LABEL> {
+>(config: ChartConfiguration<TYPE, DATA, LABEL>, width = 800, height = 600): ChartHelper<TYPE, DATA, LABEL> {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   Object.assign(defaults.font, { family: 'Courier New' });
-  defaults.color = 'transparent';
-  defaults.borderColor = 'transparent';
-  // eslint-disable-next-line no-param-reassign
+  // defaults.color = 'transparent';
+
   config.options = {
     responsive: false,
     animation: {
@@ -51,16 +50,13 @@ export default function createChart<
       legend: {
         display: false,
       },
-      colors: {
-        enabled: false,
-      },
       title: {
         display: false,
       },
     },
     ...(config.options || {}),
   } as any;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   const ctx = canvas.getContext('2d')!;
 
   // remove Path2D since not properly working
