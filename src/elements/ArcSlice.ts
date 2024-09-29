@@ -124,7 +124,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
   /**
    * @hidden
    */
-  // eslint-disable-next-line class-methods-use-this
+
   hasValue(): boolean {
     return true;
   }
@@ -157,6 +157,7 @@ export class ArcSlice extends Element<IArcSliceProps, IArcSliceOptions> implemen
         // no proper angle rotation
         ctx.ellipse(ref.cx, ref.cy, rx, ry, rot, 0, Math.PI * 2, !arc.sweep);
       }
+      ctx.closePath();
     }
 
     if (options.backgroundColor) {

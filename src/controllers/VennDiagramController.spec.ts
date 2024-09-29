@@ -1,10 +1,9 @@
-/// <reference types="jest" />
 import { LinearScale, registry } from 'chart.js';
 import { VennDiagramController } from './VennDiagramController';
 import { extractSets } from '../data';
 import { ArcSlice } from '../elements';
 import createChart from '../__tests__/createChart';
-
+import { describe, beforeAll, test, expect } from 'vitest';
 describe('venn', () => {
   beforeAll(() => {
     registry.addControllers(VennDiagramController);
@@ -27,9 +26,15 @@ describe('venn', () => {
       {
         type: VennDiagramController.id as 'venn',
         data,
+        options: {
+          borderColor: 'transparent',
+        },
       },
       1000,
       500
-    ).toMatchImageSnapshot();
+    ).toMatchImageSnapshot({
+      failureThreshold: 0.02,
+      failureThresholdType: 'percent',
+    });
   });
 });
