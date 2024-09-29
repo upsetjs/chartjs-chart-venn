@@ -1,10 +1,9 @@
-/// <reference types="jest" />
 import { LinearScale, registry } from 'chart.js';
 import { VennDiagramController } from './VennDiagramController';
 import { extractSets } from '../data';
 import { ArcSlice } from '../elements';
 import createChart from '../__tests__/createChart';
-
+import { describe, beforeAll, test } from 'vitest';
 describe('venn', () => {
   beforeAll(() => {
     registry.addControllers(VennDiagramController);

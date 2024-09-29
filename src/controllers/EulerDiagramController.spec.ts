@@ -1,10 +1,9 @@
-/// <reference types="jest" />
 import { LinearScale, registry } from 'chart.js';
 import { EulerDiagramController } from './EulerDiagramController';
 import { extractSets } from '../data';
 import { ArcSlice } from '../elements';
 import createChart from '../__tests__/createChart';
-
+import { describe, beforeAll, test } from 'vitest';
 describe('Euler', () => {
   beforeAll(() => {
     registry.addControllers(EulerDiagramController);
