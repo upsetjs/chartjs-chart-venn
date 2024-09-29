@@ -59,6 +59,8 @@ export default function createChart<
 
   const ctx = canvas.getContext('2d')!;
 
+  // remove Path2D since not properly working
+  (window as any).Path2D = null;
   const t = new Chart<TYPE, DATA, LABEL>(ctx, config);
 
   return {
