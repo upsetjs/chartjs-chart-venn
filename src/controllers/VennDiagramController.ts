@@ -163,10 +163,12 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
       ctx.textBaseline = 'middle';
 
       const labels = this.chart.data.labels as string[];
+      const cb = labelLayoutScale?.options.ticks.callback;
       l.sets.forEach((set, i) => {
         ctx.textAlign = set.align === 'middle' ? 'center' : set.align;
         ctx.textBaseline = set.verticalAlign;
-        ctx.fillText(labels[i], set.text.x, set.text.y);
+        const l = String(cb ? cb.call(this as any, labels[i], i, []) : labels[i]);
+        ctx.fillText(l, set.text.x, set.text.y);
       });
     }
 
@@ -178,8 +180,10 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
       ctx.textBaseline = 'middle';
 
       const values = (this.getDataset() as any).data as { value: number }[];
+      const cb = setLayoutScale?.options.ticks.callback;
       l.intersections.forEach((intersection, i) => {
-        ctx.fillText(values[i].value.toLocaleString(), intersection.text.x, intersection.text.y);
+        const l = String(cb ? cb.call(this as any, values[i].value, i, []) : values[i].value.toLocaleString());
+        ctx.fillText(l, intersection.text.x, intersection.text.y);
       });
     }
 
