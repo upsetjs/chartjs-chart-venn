@@ -4,7 +4,7 @@ logs
 npm-debug.log*
 
 /coverage
-/node_modules
+node_modules
 .npm
 .yarn/*
 !.yarn/patches
