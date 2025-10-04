@@ -5,7 +5,7 @@ import euler from '../model/euler';
 import type { IBoundingBox } from '../model/interfaces';
 import patchController from './patchController';
 import { ArcSlice } from '../elements';
-import { ISet } from 'src/data';
+import type { ISet } from '../data';
 
 export class EulerDiagramController extends VennDiagramController {
   static readonly id = 'euler';
