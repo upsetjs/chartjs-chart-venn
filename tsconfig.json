@@ -31,5 +31,5 @@
       "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "docs/**/*.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json", "docs/**/*.tsx"]
 }
