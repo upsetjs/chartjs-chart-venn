@@ -18,7 +18,7 @@ import { ArcSlice, IArcSliceOptions } from '../elements';
 import layout, { IVennDiagramLayout } from '../model/layout';
 import type { IArcSlice, IBoundingBox, ICircle, IEllipse } from '../model/interfaces';
 import patchController from './patchController';
-import { ISet } from 'src/data';
+import type { ISet } from '../data';
 
 export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
   static readonly id: string = 'venn';
