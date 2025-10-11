@@ -165,8 +165,8 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
       const labels = this.chart.data.labels as string[];
       const cb = labelLayoutScale?.options.ticks.callback;
       l.sets.forEach((set, i) => {
-        ctx.textAlign = set.align === 'middle' ? 'center' : set.align;
-        ctx.textBaseline = set.verticalAlign;
+        ctx.textAlign = set.align === 'middle' ? 'center' : (set.align ?? 'start');
+        ctx.textBaseline = set.verticalAlign ?? 'alphabetic';
         const l = String(cb ? cb.call(labelLayoutScale, labels[i], i, []) : labels[i]);
         ctx.fillText(l, set.text.x, set.text.y);
       });
