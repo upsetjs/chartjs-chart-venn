@@ -55,12 +55,18 @@ export class VennDiagramController extends DatasetController<'venn', ArcSlice> {
         min: -1,
         max: 1,
         display: false,
+        ticks: {
+          callback: String,
+        },
       },
       y: {
         type: 'linear',
         min: -1,
         max: 1,
         display: false,
+        ticks: {
+          callback: String,
+        },
       },
     },
   };
