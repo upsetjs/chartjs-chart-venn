@@ -27,7 +27,7 @@ jobs:
       - run: yarn build
       - run: yarn lint
       - run: yarn test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: diff outputs
